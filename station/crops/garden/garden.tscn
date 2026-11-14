@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://whue32ygc3h7"]
+
+[ext_resource type="Script" uid="uid://dptujq1ec15g5" path="res://station/crops/garden/garden.gd" id="1_06mfm"]
+[ext_resource type="PackedScene" uid="uid://vrice62eoaed" path="res://station/plant_pot/plant_pot.tscn" id="1_331ds"]
+[ext_resource type="PackedScene" uid="uid://cm3sxpgo4jv81" path="res://station/crops/garden/garden_pot_menu.tscn" id="3_3bqu7"]
+
+[node name="Garden" type="Node2D" unique_id=1437805049]
+script = ExtResource("1_06mfm")
+
+[node name="Pots" type="Node2D" parent="." unique_id=814932931]
+
+[node name="PlantPot" parent="Pots" unique_id=583261696 instance=ExtResource("1_331ds")]
+
+[node name="PlantPot2" parent="Pots" unique_id=168612620 instance=ExtResource("1_331ds")]
+
+[node name="PlantPot3" parent="Pots" unique_id=1261387147 instance=ExtResource("1_331ds")]
+
+[node name="PlantPot4" parent="Pots" unique_id=1485152206 instance=ExtResource("1_331ds")]
+
+[node name="PotMenu" parent="Pots" unique_id=205615808 instance=ExtResource("3_3bqu7")]

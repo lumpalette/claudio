@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://bshkelxhgxkts"]
+
+[ext_resource type="Script" uid="uid://dcqa2u6aoqwh8" path="res://station/plant_pot/plant_pot_test.gd" id="1_8vkof"]
+[ext_resource type="PackedScene" uid="uid://vrice62eoaed" path="res://station/plant_pot/plant_pot.tscn" id="2_stwta"]
+
+[node name="PlantPotTest" type="Node2D" unique_id=1299649311]
+script = ExtResource("1_8vkof")
+
+[node name="PlantPot" parent="." unique_id=583261696 instance=ExtResource("2_stwta")]
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=322055461]
+
+[node name="Buttons" type="VBoxContainer" parent="UI" unique_id=404177755]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="CropOption" type="OptionButton" parent="UI/Buttons" unique_id=1357722491]
+layout_mode = 2
+
+[node name="PlantButton" type="Button" parent="UI/Buttons" unique_id=1996936783]
+layout_mode = 2
+
+[node name="WaterButton" type="Button" parent="UI/Buttons" unique_id=1320224231]
+layout_mode = 2
+
+[node name="HarvestButton" type="Button" parent="UI/Buttons" unique_id=1090929293]
+layout_mode = 2
+
+[node name="NextDayButton" type="Button" parent="UI/Buttons" unique_id=989412656]
+layout_mode = 2
+
+[node name="StateLabel" type="Label" parent="UI/Buttons" unique_id=1466608394]
+layout_mode = 2
