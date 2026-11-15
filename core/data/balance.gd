@@ -1,0 +1,171 @@
+class_name Balance
+extends RefCounted
+
+## Statistics names.
+const SATIETY := &"satiety"
+const HYDRATION := &"hydration"
+const REST := &"rest"
+const WELLBEING := &"wellbeing"
+const STATION_OXYGEN := &"station_oxygen"
+const STATION_WATER := &"station_water"
+const STATION_ENERGY := &"station_energy"
+
+## HUD statistics.
+const HUD_STATS: Array[StringName] = [SATIETY, HYDRATION, STATION_OXYGEN, WELLBEING]
+
+## Vital statistics, from the player.
+const FATAL_STATS := {
+	SATIETY: "starvation",
+	HYDRATION: "dehydration",
+	STATION_OXYGEN: "suffocation",
+}
+
+## Initial states for statistics.
+const START_STATS := {
+	SATIETY: 100.0,
+	HYDRATION: 100.0,
+	REST: 100.0,
+	WELLBEING: 100.0,
+	STATION_OXYGEN: 100.0,
+	STATION_WATER: 100.0,
+	STATION_ENERGY: 100.0,
+}
+
+## Maximum quantity for all statistics.
+const STAT_MAX := {
+	SATIETY: 100.0,
+	HYDRATION: 100.0,
+	REST: 100.0,
+	WELLBEING: 100.0,
+	STATION_OXYGEN: 100.0,
+	STATION_WATER: 100.0,
+	STATION_ENERGY: 100.0,
+}
+
+
+## Time constants.
+const DAY_LENGTH_SECONDS := 360.0  # demo: 120.0
+const SECONDS_PER_GAME_HOUR := DAY_LENGTH_SECONDS / 24.0
+const START_HOUR := 6.0
+const TOTAL_DAYS := 7
+const VICTORY_HOUR := TOTAL_DAYS * 24.0  # 168
+const RADIATION_DAY := 5
+const RADIATION_HOUR := (RADIATION_DAY - 1) * 24.0 + 6.0  # 102
+const TIME_STEP := 0.25
+
+## Duration of every action.
+const ACTION_HOURS := {
+	"eat": 0.5,
+	"drink": 0.5,
+	"sow": 0.5,
+	"harvest": 0.5,
+	"electrolysis": 1.0,
+	"puzzle": 1.0,
+	"filter_water": 1.0,
+	"ping_pong": 1.0,
+	"sleep": 8.0,
+	"faint": 12.0,
+}
+
+## Statistic decay when [awake, sleeping]. Negative means the stat goes up.
+const DECAY := {
+	SATIETY: [1.0, 0.5],
+	HYDRATION: [3.0, 1.5],
+	REST: [3.0, -10.0],
+	WELLBEING: [1.5, 0.0],
+	STATION_OXYGEN: [2.0, 2.0],
+}
+
+
+## Satiety and satisfaction constants.
+const SATIETY_SATISFIED_THRESHOLD := 70.0  # >= 70 means satisfied.
+const SATIETY_HUNGRY_THRESHOLD := 40.0     # >= 40 means you have hunger; < 40 means fatal
+const SATIETY_STATE_SATISFIED := "Satisfecho"
+const SATIETY_STATE_HUNGRY := "Con hambre"
+const SATIETY_STATE_STARVING := "Hambriento"
+
+## Satiety decay produced by performing actions.
+const ACTION_SATIETY_COST_SATISFIED := 5.0
+const ACTION_SATIETY_COST_HUNGRY := 7.0
+const ACTION_SATIETY_COST_STARVING := 10.0
+const SATIETY_COST_ACTIONS := ["electrolysis", "puzzle", "filter_water", "harvest"]
+
+const LOW_WELLBEING_THRESHOLD := 40.0
+const LOW_WELLBEING_SATIETY_MULT := 1.5
+
+const WARNING_THRESHOLD := 20.0  # Barras del HUD parpadean; aviso de agua/energía
+const LOW_REST_WARNING := 20.0   # "Estás muy cansado, ve a dormir"
+const FULL_WARNING := 90.0       # "Ya estás lleno"
+
+
+# Sleep constants.
+const SLEEP_MAX_REST := 70.0
+const SLEEP_FROM_HOUR := 20.0
+const SLEEP_UNTIL_HOUR := 6.0
+const FAINT_WELLBEING_PENALTY := 10.0
+
+
+# Operation constants.
+const ELECTROLYSIS_WATER_COST := 10.0
+const ELECTROLYSIS_ENERGY_COST := 5.0
+const ELECTROLYSIS_OXYGEN := 50.0
+const PUZZLE_ENERGY := 40.0
+const FILTER_ENERGY_COST := 5.0
+const FILTER_WATER := 35.0
+const PING_PONG_MIN := 15.0
+const PING_PONG_MAX := 25.0
+
+## Resultado de un minijuego: nunca 0, para que nadie se quede atorado.
+const MINIGAME_MIN_RESULT := 0.5
+const MINIGAME_MAX_RESULT := 1.0
+const MINIGAME_FALLBACK_HOLD_SECONDS := 3.0  # "mantén presionada la E"
+
+
+# --- Invernadero ---
+const CROPS := {
+	"lettuce": {"name": "Lechuga", "grow_hours": 12.0, "water": 1.0, "food": 15.0},
+	"tomato": {"name": "Tomate enano", "grow_hours": 24.0, "water": 5.0, "food": 30.0},
+	"chili": {"name": "Chile", "grow_hours": 48.0, "water": 3.0, "food": 50.0},
+}
+const SOW_ENERGY := 5.0
+const HARVEST_ENERGY := 2.0
+const HARVEST_WELLBEING := 5.0
+const CROP_STAGES := 3  # Etapas del sprite del cultivo
+
+
+# --- Cocina ---
+const FOODS := {
+	"chicken_soup": {"name": "Chicken Soup", "satiety": 25.0, "heatable": true},
+	"mac_and_cheese": {"name": "Mac and Cheese", "satiety": 20.0, "heatable": true},
+	"scrambled_eggs": {"name": "Scrambled Eggs", "satiety": 15.0, "heatable": true},
+	"lettuce": {"name": "Lechuga", "satiety": 15.0, "heatable": false},
+	"tomato": {"name": "Tomate enano", "satiety": 30.0, "heatable": false},
+	"chili": {"name": "Chile", "satiety": 50.0, "heatable": false},
+}
+const HEAT_ENERGY := 5.0
+const HEAT_WELLBEING := 5.0
+const DRINK_WATER_COST := 10.0
+const DRINK_HYDRATION := 40.0
+
+const START_INVENTORY := {"chicken_soup": 2, "mac_and_cheese": 2, "scrambled_eggs": 2}
+
+
+# --- Radiación (DONKI) ---
+const DONKI_FILE_PATH := "res://data/donki_flares.json"
+const RADIATION_PENALTY := {"C": 20.0, "M": 30.0, "X": 40.0}
+const RADIATION_ALERT_TEXT := {
+	"C": "Llamarada débil (clase C)",
+	"M": "Llamarada media (clase M)",
+	"X": "Llamarada fuerte (clase X)",
+}
+const RADIATION_WELLBEING_MULT := 1.5
+const RADIATION_WELLBEING_MAX := 70.0
+
+## Evento de respaldo si el JSON falla o está vacío (clase M).
+## TODO: reemplazar estos campos por un registro real de donki_flares.json.
+const FALLBACK_FLARE := {
+	"flrID": "FALLBACK",
+	"classType": "M1.0",
+	"beginTime": "2024-01-01T00:00Z",
+	"peakTime": "2024-01-01T00:00Z",
+}

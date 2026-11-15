@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://c5n7b5ga3wbj1"]
 
-[ext_resource type="Script" uid="uid://bdlm8cwwd2flx" path="res://entities/player/player.gd" id="1_unhdg"]
-[ext_resource type="SpriteFrames" uid="uid://bqlklj87wkx2g" path="res://entities/player/player_animation.tres" id="2_tukwm"]
+[ext_resource type="Script" uid="uid://bdlm8cwwd2flx" path="res://core/player/player.gd" id="1_unhdg"]
+[ext_resource type="SpriteFrames" uid="uid://ck2oet8wrblgr" path="res://core/player/player_animation.tres" id="2_tukwm"]
 [ext_resource type="Script" uid="uid://p25ms5wm6m2n" path="res://core/state_machine.gd" id="3_sglur"]
-[ext_resource type="Script" uid="uid://cot16gdphic3e" path="res://entities/player/states/move_state.gd" id="4_bls4j"]
-[ext_resource type="Script" uid="uid://bdxsxjnm62dlu" path="res://entities/player/states/idle_state.gd" id="4_fkugw"]
+[ext_resource type="Script" uid="uid://cot16gdphic3e" path="res://core/player/states/move_state.gd" id="4_bls4j"]
+[ext_resource type="Script" uid="uid://bdxsxjnm62dlu" path="res://core/player/states/idle_state.gd" id="4_fkugw"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_it3rg"]
 size = Vector2(12, 10)
@@ -20,10 +20,10 @@ friction = 1000.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1211765088]
 sprite_frames = ExtResource("2_tukwm")
-animation = &"idle_down"
+animation = &"idle_up"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1855772908]
-position = Vector2(0.5, 10)
+position = Vector2(0, 9)
 shape = SubResource("RectangleShape2D_it3rg")
 
 [node name="States" type="Node" parent="." unique_id=420423964]

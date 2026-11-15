@@ -9,7 +9,7 @@ func enter() -> void:
 
 
 func physics_process(delta: float) -> void:
-	var dir_vector = Input.get_vector("left", "right", "up", "down")
+	var dir_vector = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	if dir_vector == Vector2.ZERO:
 		_this.state.set_state("idle")
