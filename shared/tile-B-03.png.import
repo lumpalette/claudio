@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://7vlmxoxpvumq"
-path="res://.godot/imported/1.png-c2045f92e2d6bac65a23d7a6523519ac.ctex"
+uid="uid://dt7hukdliv1sq"
+path="res://.godot/imported/tile-B-03.png-99830dc89b4dd0064337d1d7e14c58ec.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://operations/spaceship/1.png"
-dest_files=["res://.godot/imported/1.png-c2045f92e2d6bac65a23d7a6523519ac.ctex"]
+source_file="res://shared/tile-B-03.png"
+dest_files=["res://.godot/imported/tile-B-03.png-99830dc89b4dd0064337d1d7e14c58ec.ctex"]
 
 [params]
 

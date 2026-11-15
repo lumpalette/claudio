@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c86xfsmbf0gv3"
-path="res://.godot/imported/10.png-0c5da93f2817f06de69024e272e7a02d.ctex"
+uid="uid://bnoeyh5fc5k4i"
+path="res://.godot/imported/7.png-008c3035020fab9989ba57dbebd0c093.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Green house/10.png"
-dest_files=["res://.godot/imported/10.png-0c5da93f2817f06de69024e272e7a02d.ctex"]
+source_file="res://shared/7.png"
+dest_files=["res://.godot/imported/7.png-008c3035020fab9989ba57dbebd0c093.ctex"]
 
 [params]
 

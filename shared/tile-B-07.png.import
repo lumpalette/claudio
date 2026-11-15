@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://y3y7miggs110"
-path="res://.godot/imported/Auto-tile-A4-walls-3.png-059445932b89a588b37cb23e114ca600.ctex"
+uid="uid://dlqqsvde2bita"
+path="res://.godot/imported/tile-B-07.png-e15e0c20185f008e300570df7af3f383.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://operations/spaceship/Auto-tile-A4-walls-3.png"
-dest_files=["res://.godot/imported/Auto-tile-A4-walls-3.png-059445932b89a588b37cb23e114ca600.ctex"]
+source_file="res://shared/tile-B-07.png"
+dest_files=["res://.godot/imported/tile-B-07.png-e15e0c20185f008e300570df7af3f383.ctex"]
 
 [params]
 

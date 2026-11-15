@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dfbmhlxp7plcu"]
 
-[ext_resource type="Script" uid="uid://cdcjba7ubcty0" path="res://operations/spaceship/npc.gd" id="1_a7ku4"]
+[ext_resource type="Script" uid="uid://cdcjba7ubcty0" path="res://npc.gd" id="1_a7ku4"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_62ogv"]
 load_path = "res://.godot/imported/solar_panels_battery.png-52fcf84631d328428d85de7593e3b44f.ctex"
