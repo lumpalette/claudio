@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://bp4u3ui6cbpkr"]
+
+[ext_resource type="Script" uid="uid://bgqp7bahw5kod" path="res://core/camera/camera.gd" id="1_5gvjs"]
+
+[node name="Camera" type="Camera2D" unique_id=1958690602]
+script = ExtResource("1_5gvjs")
+speed = 450.0

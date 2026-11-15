@@ -26,12 +26,12 @@ static func get_direction_from_vector(vector: Vector2, deadzone: float, fallback
 		return Direction.RIGHT
 	elif vector.x < -deadzone:
 		return Direction.LEFT
-	
+
 	if vector.y < -deadzone:
 		return Direction.UP
 	elif vector.y > deadzone:
 		return Direction.DOWN
-	
+
 	# For zero vectors, we return an invalid direction because idk
 	@warning_ignore("int_as_enum_without_match")
 	return fallback
