@@ -1,16 +1,15 @@
 [gd_scene format=4 uid="uid://do8rwsxekpjvb"]
-
-[ext_resource type="Texture2D" uid="uid://bvv37cwyn8agr" path="res://shared/3.png" id="1_vkyei"]
-[ext_resource type="Texture2D" uid="uid://7vlmxoxpvumq" path="res://shared/1.png" id="2_l17ue"]
-[ext_resource type="Texture2D" uid="uid://clrxr8gb582rj" path="res://shared/4.png" id="3_v3p1d"]
-[ext_resource type="Texture2D" uid="uid://bork6wfu6fgds" path="res://shared/5.png" id="4_56y0y"]
-[ext_resource type="Texture2D" uid="uid://dmd4kxw0p1836" path="res://shared/6.png" id="5_sarma"]
-[ext_resource type="Texture2D" uid="uid://bnoeyh5fc5k4i" path="res://shared/7.png" id="6_73i5g"]
-[ext_resource type="Texture2D" uid="uid://gggii1lnwsy7" path="res://shared/8.png" id="7_ce6g7"]
-[ext_resource type="Texture2D" uid="uid://delyksyhe1dd3" path="res://shared/tile-B-02.png" id="8_31it1"]
-[ext_resource type="Texture2D" uid="uid://dt7hukdliv1sq" path="res://shared/tile-B-03.png" id="9_nph2u"]
+[ext_resource type="Texture2D" uid="uid://bvv37cwyn8agr" path="res://shared/spaceship/3.png" id="1_vkyei"]
+[ext_resource type="Texture2D" uid="uid://7vlmxoxpvumq" path="res://shared/spaceship/1.png" id="2_l17ue"]
+[ext_resource type="Texture2D" uid="uid://clrxr8gb582rj" path="res://shared/spaceship/4.png" id="3_v3p1d"]
+[ext_resource type="Texture2D" uid="uid://bork6wfu6fgds" path="res://shared/spaceship/5.png" id="4_56y0y"]
+[ext_resource type="Texture2D" uid="uid://dmd4kxw0p1836" path="res://shared/spaceship/6.png" id="5_sarma"]
+[ext_resource type="Texture2D" uid="uid://bnoeyh5fc5k4i" path="res://shared/spaceship/7.png" id="6_73i5g"]
+[ext_resource type="Texture2D" uid="uid://gggii1lnwsy7" path="res://shared/spaceship/8.png" id="7_ce6g7"]
+[ext_resource type="Texture2D" uid="uid://delyksyhe1dd3" path="res://shared/spaceship/tile-B-02.png" id="8_31it1"]
+[ext_resource type="Texture2D" uid="uid://dt7hukdliv1sq" path="res://shared/spaceship/tile-B-03.png" id="9_nph2u"]
 [ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="10_vkyei"]
-
+[ext_resource type="PackedScene" uid="uid://dfbmhlxp7plcu" path="res://npc.tscn" id="10_eawju"]
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0t166"]
 texture = ExtResource("1_vkyei")
 0:0/0 = 0

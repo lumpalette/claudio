@@ -21,7 +21,8 @@ friction = 1200.0
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1211765088]
 sprite_frames = ExtResource("2_tukwm")
-animation = &"idle_down"
+animation = &"move_down"
+frame_progress = 0.32092723
 offset = Vector2(0, -14)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1855772908]

@@ -55,6 +55,7 @@ func reset() -> void:
 	_queued_hours = 0.0
 	_faint_pending = false
 	time_changed.emit(get_day(), get_hour())
+	pause_clock(&"init")
 
 
 func _process(delta: float) -> void:
