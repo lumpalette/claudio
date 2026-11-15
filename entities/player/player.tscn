@@ -1,0 +1,38 @@
+[gd_scene format=3 uid="uid://c5n7b5ga3wbj1"]
+
+[ext_resource type="Script" uid="uid://bdlm8cwwd2flx" path="res://entities/player/player.gd" id="1_unhdg"]
+[ext_resource type="SpriteFrames" uid="uid://bqlklj87wkx2g" path="res://entities/player/player_animation.tres" id="2_tukwm"]
+[ext_resource type="Script" uid="uid://p25ms5wm6m2n" path="res://core/state_machine.gd" id="3_sglur"]
+[ext_resource type="Script" uid="uid://cot16gdphic3e" path="res://entities/player/states/move_state.gd" id="4_bls4j"]
+[ext_resource type="Script" uid="uid://bdxsxjnm62dlu" path="res://entities/player/states/idle_state.gd" id="4_fkugw"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_it3rg"]
+size = Vector2(12, 10)
+
+[node name="Player" type="CharacterBody2D" unique_id=1796187236 node_paths=PackedStringArray("animator", "state")]
+motion_mode = 1
+script = ExtResource("1_unhdg")
+animator = NodePath("AnimatedSprite2D")
+state = NodePath("States")
+max_speed = 100.0
+acceleration = 1000.0
+friction = 1000.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1211765088]
+sprite_frames = ExtResource("2_tukwm")
+animation = &"idle_down"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1855772908]
+position = Vector2(0.5, 10)
+shape = SubResource("RectangleShape2D_it3rg")
+
+[node name="States" type="Node" parent="." unique_id=420423964]
+script = ExtResource("3_sglur")
+
+[node name="Idle" type="Node" parent="States" unique_id=379962851 node_paths=PackedStringArray("_this")]
+script = ExtResource("4_fkugw")
+_this = NodePath("../..")
+
+[node name="Move" type="Node" parent="States" unique_id=28691115 node_paths=PackedStringArray("_this")]
+script = ExtResource("4_bls4j")
+_this = NodePath("../..")
