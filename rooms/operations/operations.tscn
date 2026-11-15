@@ -9,8 +9,6 @@
 [ext_resource type="Texture2D" uid="uid://gggii1lnwsy7" path="res://shared/textures/8.png" id="7_ce6g7"]
 [ext_resource type="Texture2D" uid="uid://delyksyhe1dd3" path="res://shared/textures/tile-B-02.png" id="8_31it1"]
 [ext_resource type="Texture2D" uid="uid://dt7hukdliv1sq" path="res://shared/textures/tile-B-03.png" id="9_nph2u"]
-[ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="10_vkyei"]
-[ext_resource type="PackedScene" uid="uid://bp4u3ui6cbpkr" path="res://core/camera/camera.tscn" id="11_l17ue"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0t166"]
 texture = ExtResource("1_vkyei")
@@ -20744,11 +20742,3 @@ shape = SubResource("RectangleShape2D_426oi")
 [node name="MachineLeftCollider" type="CollisionShape2D" parent="Walls" unique_id=861367225]
 position = Vector2(255, 160.5)
 shape = SubResource("RectangleShape2D_vkyei")
-
-[node name="Player" parent="." unique_id=1796187236 instance=ExtResource("10_vkyei")]
-position = Vector2(152, 202)
-
-[node name="Camera" parent="." unique_id=1958690602 node_paths=PackedStringArray("target") instance=ExtResource("11_l17ue")]
-position = Vector2(314, 179)
-target = NodePath("../Player")
-target_position = Vector2(100, 100)
