@@ -26,6 +26,9 @@ var is_fainted := false
 var radiation_triggered := false
 ## Hora en la que cae la próxima llamarada de la tormenta.
 var _next_flare_hour := INF
+## Día en el que empezó la tormenta (normalmente Balance.RADIATION_DAY, pero
+## con la tecla de depuración puede empezar antes).
+var _storm_start_day := 0
 
 ## El reloj corre si nadie lo pausó y el juego no terminó.
 ## Para pausar usa pause_clock(motivo) / resume_clock(motivo): así un menú que se
@@ -59,6 +62,7 @@ func reset() -> void:
 	is_fainted = false
 	radiation_triggered = false
 	_next_flare_hour = INF
+	_storm_start_day = 0
 	_pause_reasons.clear()
 	_advancing = false
 	_queued_hours = 0.0
@@ -254,6 +258,7 @@ func trigger_radiation() -> void:
 	if radiation_triggered or GameState.is_game_over:
 		return
 	radiation_triggered = true
+	_storm_start_day = get_day()
 
 	var event := _pick_flare()
 	var flare_class := String(event.get("classType", "M")).left(1).to_upper()
@@ -281,7 +286,14 @@ func is_storm_active() -> bool:
 func get_storm_day() -> int:
 	if not radiation_triggered:
 		return 0
-	return get_day() - Balance.RADIATION_DAY + 1
+	return get_day() - _storm_start_day + 1
+
+
+## Cuántos días dura la tormenta: desde que empezó hasta el final de la misión.
+func get_storm_total_days() -> int:
+	if not radiation_triggered:
+		return 0
+	return maxi(Balance.TOTAL_DAYS - _storm_start_day + 1, 1)
 
 
 ## Una réplica: pega al bienestar y avisa, sin detener el juego.

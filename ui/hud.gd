@@ -414,7 +414,7 @@ func _update_storm(blink_on: bool) -> void:
 	if not active:
 		return
 	_storm_label.text = "TORMENTA SOLAR - DIA %d DE %d" % [
-		TimeManager.get_storm_day(), Balance.TOTAL_DAYS - Balance.RADIATION_DAY + 1]
+		TimeManager.get_storm_day(), TimeManager.get_storm_total_days()]
 	_storm_panel.modulate = Color.WHITE if blink_on else Color(1.0, 0.75, 0.75)
 
 
