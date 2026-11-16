@@ -1,0 +1,14 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://rooms/greenhouse/microwave/microwave.gd" id="1_microwave"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_area"]
+size = Vector2(80, 62)
+
+[node name="Microwave" type="Area2D"]
+script = ExtResource("1_microwave")
+
+[node name="InteractionArea" type="CollisionShape2D" parent="."]
+position = Vector2(-4, -11)
+shape = SubResource("RectangleShape2D_area")
+

@@ -1,0 +1,8 @@
+[gd_scene format=4]
+
+[ext_resource type="Script" path="res://rooms/greenhouse/food_menu/food_menu.gd" id="1_menu"]
+
+[node name="FoodMenu" type="CanvasLayer"]
+layer = 10
+visible = false
+script = ExtResource("1_menu")

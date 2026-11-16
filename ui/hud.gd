@@ -356,7 +356,7 @@ func _update_prompt() -> void:
 		target = player.get_closest_interactable()
 	_prompt_panel.visible = target != null
 	if target:
-		_prompt_label.text = "[E] " + target.prompt
+		_prompt_label.text = "[E] " + target.get_prompt()
 
 
 func _set_clock_visible(value: bool) -> void:

@@ -143,21 +143,41 @@ const MINIGAME_FALLBACK_HOLD_SECONDS := 3.0  # "mantén presionada la E"
 
 
 # --- Invernadero ---
+## Tipo de cultivo de una maceta. NONE (0) = maceta vacía.
+enum CropType { NONE, LETTUCE, CHILI, TOMATO }
+
+## Número de macetas del invernadero (una planta por maceta).
+const PLOT_COUNT := 6
+
+## food_id: clave en FOODS y en el inventario (la saciedad vive solo en FOODS).
+## water: agua de la estación que se cobra al sembrar.
+## yield: unidades que se suman al inventario al cosechar.
+## harvest_wellbeing: bienestar que da cosecharlo.
 const CROPS := {
-	"lettuce": {"name": "Lechuga", "grow_hours": 12.0, "water": 1.0, "food": 15.0},
-	"tomato": {"name": "Tomate enano", "grow_hours": 24.0, "water": 5.0, "food": 30.0},
-	"chili": {"name": "Chile", "grow_hours": 48.0, "water": 3.0, "food": 50.0},
+	CropType.LETTUCE: {
+		"food_id": "lettuce", "name": "Lechuga",
+		"grow_hours": 12.0, "water": 1.0, "yield": 3, "harvest_wellbeing": 5.0,
+	},
+	CropType.TOMATO: {
+		"food_id": "tomato", "name": "Tomate enano",
+		"grow_hours": 24.0, "water": 5.0, "yield": 2, "harvest_wellbeing": 5.0,
+	},
+	CropType.CHILI: {
+		"food_id": "chili", "name": "Chile",
+		"grow_hours": 48.0, "water": 3.0, "yield": 1, "harvest_wellbeing": 15.0,
+	},
 }
 const SOW_ENERGY := 5.0
 const HARVEST_ENERGY := 2.0
-const HARVEST_WELLBEING := 5.0
-const CROP_STAGES := 3  # Etapas del sprite del cultivo
+const CROP_STAGES := 3  # Etapas del sprite: 0 brote, 1 creciendo, 2 lista
+## Fracción del crecimiento a partir de la cual se muestra la etapa 1.
+const CROP_GROWING_AT := 0.5
 
 
 # --- Cocina ---
 const FOODS := {
 	"chicken_soup": {"name": "Sopa de pollo", "satiety": 25.0, "heatable": true},
-	"mac_and_cheese": {"name": "Macarrones", "satiety": 20.0, "heatable": true},
+	"mac_and_cheese": {"name": "Macarrones con queso", "satiety": 20.0, "heatable": true},
 	"scrambled_eggs": {"name": "Huevos revueltos", "satiety": 15.0, "heatable": true},
 	"lettuce": {"name": "Lechuga", "satiety": 15.0, "heatable": false},
 	"tomato": {"name": "Tomate enano", "satiety": 30.0, "heatable": false},

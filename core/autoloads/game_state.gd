@@ -8,7 +8,8 @@ extends Node
 
 signal stat_changed(stat: StringName, value: float)
 signal inventory_changed()
-signal crop_changed()
+## Se emite cuando una maceta cambia (se siembra, se cosecha o se reinicia).
+signal crop_changed(plot: int)
 signal message(text: String)
 signal game_over(reason: String)
 signal victory()
@@ -33,8 +34,10 @@ var stats: Dictionary[StringName, float] = {}
 var stat_max: Dictionary[StringName, float] = {}
 var inventory: Dictionary[String, int] = {}
 
-var crop_type: String = ""
-var crop_planted_at: float = 0.0
+## Macetas del invernadero (Balance.PLOT_COUNT). Cada una es
+## {"type": Balance.CropType, "planted_at": float (TimeManager.total_hours)}.
+## Usar las funciones de la sección Invernadero, no leer esto directo.
+var plots: Array[Dictionary] = []
 
 ## true tanto en game over como en victoria: el juego terminó.
 var is_game_over := false
@@ -69,8 +72,9 @@ func reset() -> void:
 	for food_id: String in Balance.START_INVENTORY:
 		inventory[food_id] = Balance.START_INVENTORY[food_id]
 
-	crop_type = ""
-	crop_planted_at = 0.0
+	plots.clear()
+	for i in Balance.PLOT_COUNT:
+		plots.append(_empty_plot())
 	is_game_over = false
 	is_victory = false
 	radiation_active = false
@@ -79,7 +83,8 @@ func reset() -> void:
 	for stat: StringName in stats:
 		stat_changed.emit(stat, stats[stat])
 	inventory_changed.emit()
-	crop_changed.emit()
+	for i in Balance.PLOT_COUNT:
+		crop_changed.emit(i)
 
 
 # --- Estados ---------------------------------------------------------------
@@ -287,18 +292,22 @@ func filter_water() -> bool:
 
 
 # --- Invernadero -----------------------------------------------------------
+## El cultivo crece solo con el tiempo: el progreso se calcula con
+## TimeManager.total_hours, así sigue creciendo mientras Claudio duerme o
+## hace minijuegos. El agua se cobra completa al sembrar.
 
-func sow(crop_id: String) -> bool:
-	if is_game_over:
+## Siembra `type` en la maceta `plot`. Cobra energía y el agua del cultivo.
+func sow(plot: int, type: Balance.CropType) -> bool:
+	if is_game_over or not _is_valid_plot(plot):
 		return false
-	if not Balance.CROPS.has(crop_id):
-		push_error("GameState.sow: cultivo desconocido '%s'" % crop_id)
+	if not Balance.CROPS.has(type):
+		push_error("GameState.sow: cultivo desconocido '%s'" % type)
 		return false
-	if crop_type != "":
-		message.emit("Ya hay una planta en el invernadero")
+	if get_plot_type(plot) != Balance.CropType.NONE:
+		message.emit("Esta maceta ya tiene una planta")
 		return false
 
-	var crop: Dictionary = Balance.CROPS[crop_id]
+	var crop: Dictionary = Balance.CROPS[type]
 	var costs := {
 		Balance.STATION_ENERGY: Balance.SOW_ENERGY,
 		Balance.STATION_WATER: crop["water"],
@@ -307,37 +316,25 @@ func sow(crop_id: String) -> bool:
 		return false
 
 	spend(costs)
-	crop_type = crop_id
-	crop_planted_at = TimeManager.total_hours
-	crop_changed.emit()
+	plots[plot] = {"type": type, "planted_at": TimeManager.total_hours}
+	crop_changed.emit(plot)
+	message.emit("Sembraste %s" % String(crop["name"]).to_lower())
 	apply_action_cost("sow")
 	TimeManager.advance_hours(Balance.ACTION_HOURS["sow"])
 	return true
 
 
-func is_crop_ready() -> bool:
-	if crop_type == "":
+## Cosecha la maceta `plot` si está lista: suma `yield` unidades al inventario.
+func harvest(plot: int) -> bool:
+	if is_game_over or not _is_valid_plot(plot):
 		return false
-	var grow_hours: float = Balance.CROPS[crop_type]["grow_hours"]
-	return TimeManager.total_hours >= crop_planted_at + grow_hours
-
-
-## Progreso de 0 a 1 para el sprite del cultivo.
-func get_crop_progress() -> float:
-	if crop_type == "":
-		return 0.0
-	var grow_hours: float = Balance.CROPS[crop_type]["grow_hours"]
-	return clampf((TimeManager.total_hours - crop_planted_at) / grow_hours, 0.0, 1.0)
-
-
-func harvest() -> bool:
-	if is_game_over:
-		return false
-	if crop_type == "":
+	var type := get_plot_type(plot)
+	if type == Balance.CropType.NONE:
 		message.emit("No hay nada sembrado")
 		return false
-	if not is_crop_ready():
-		message.emit("La planta todavía no está lista")
+	if not is_crop_ready(plot):
+		message.emit("El cultivo de %s aún no está listo (faltan %d h)" % [
+			get_crop_name(plot).to_lower(), ceili(get_hours_left(plot))])
 		return false
 
 	var costs := {Balance.STATION_ENERGY: Balance.HARVEST_ENERGY}
@@ -345,16 +342,75 @@ func harvest() -> bool:
 		return false
 
 	spend(costs)
-	var harvested := crop_type
-	inventory[harvested] = inventory.get(harvested, 0) + 1
-	crop_type = ""
-	crop_planted_at = 0.0
+	var crop: Dictionary = Balance.CROPS[type]
+	var food_id: String = crop["food_id"]
+	var amount: int = crop["yield"]
+	inventory[food_id] = inventory.get(food_id, 0) + amount
+	plots[plot] = _empty_plot()
 	inventory_changed.emit()
-	crop_changed.emit()
-	change_stat(Balance.WELLBEING, Balance.HARVEST_WELLBEING)
+	crop_changed.emit(plot)
+	message.emit("Cosechaste %d × %s" % [amount, crop["name"]])
+	change_stat(Balance.WELLBEING, crop["harvest_wellbeing"])
 	apply_action_cost("harvest")
 	TimeManager.advance_hours(Balance.ACTION_HOURS["harvest"])
 	return true
+
+
+func get_plot_type(plot: int) -> Balance.CropType:
+	if not _is_valid_plot(plot):
+		return Balance.CropType.NONE
+	return plots[plot]["type"]
+
+
+## Nombre del cultivo para mostrar ("" si la maceta está vacía).
+func get_crop_name(plot: int) -> String:
+	var type := get_plot_type(plot)
+	if type == Balance.CropType.NONE:
+		return ""
+	return Balance.CROPS[type]["name"]
+
+
+func is_crop_ready(plot: int) -> bool:
+	return get_plot_type(plot) != Balance.CropType.NONE and get_hours_left(plot) <= 0.0
+
+
+## Horas que faltan para cosechar (0 si está lista o vacía).
+func get_hours_left(plot: int) -> float:
+	var type := get_plot_type(plot)
+	if type == Balance.CropType.NONE:
+		return 0.0
+	var grow_hours: float = Balance.CROPS[type]["grow_hours"]
+	var planted_at: float = plots[plot]["planted_at"]
+	return maxf(planted_at + grow_hours - TimeManager.total_hours, 0.0)
+
+
+## Progreso de 0 a 1.
+func get_crop_progress(plot: int) -> float:
+	var type := get_plot_type(plot)
+	if type == Balance.CropType.NONE:
+		return 0.0
+	var grow_hours: float = Balance.CROPS[type]["grow_hours"]
+	return clampf(1.0 - get_hours_left(plot) / grow_hours, 0.0, 1.0)
+
+
+## Etapa del sprite: 0 brote, 1 creciendo, 2 lista (-1 si está vacía).
+## La última etapa solo aparece cuando ya se puede cosechar.
+func get_crop_stage(plot: int) -> int:
+	if get_plot_type(plot) == Balance.CropType.NONE:
+		return -1
+	if is_crop_ready(plot):
+		return Balance.CROP_STAGES - 1
+	if get_crop_progress(plot) >= Balance.CROP_GROWING_AT:
+		return 1
+	return 0
+
+
+## true si alguna maceta está lista para cosechar.
+func has_ready_crop() -> bool:
+	for plot in plots.size():
+		if is_crop_ready(plot):
+			return true
+	return false
 
 
 # --- Cocina ----------------------------------------------------------------
@@ -405,6 +461,25 @@ func eat(food_id: String, heated := false) -> bool:
 	apply_action_cost("eat")
 	TimeManager.advance_hours(Balance.ACTION_HOURS["eat"])
 	return true
+
+
+## Come en el microondas: si el alimento se calienta y la estación tiene
+## energía, lo calienta (−HEAT_ENERGY, +HEAT_WELLBEING). Las verduras, o la
+## comida cuando no hay energía, se comen frías.
+func eat_at_microwave(food_id: String) -> bool:
+	if not Balance.FOODS.has(food_id):
+		push_error("GameState.eat_at_microwave: alimento desconocido '%s'" % food_id)
+		return false
+	var heated := can_heat(food_id)
+	if Balance.FOODS[food_id]["heatable"] and not heated and get_food_count(food_id) > 0:
+		message.emit("No hay energía en la estación: se come sin calentar")
+	return eat(food_id, heated)
+
+
+## true si `food_id` se calienta y la estación tiene energía para hacerlo.
+func can_heat(food_id: String) -> bool:
+	return Balance.FOODS.has(food_id) and Balance.FOODS[food_id]["heatable"] \
+		and can_afford({Balance.STATION_ENERGY: Balance.HEAT_ENERGY})
 
 
 func drink() -> bool:
@@ -473,6 +548,17 @@ func debug_fill() -> void:
 
 
 # --- Internas --------------------------------------------------------------
+
+func _empty_plot() -> Dictionary:
+	return {"type": Balance.CropType.NONE, "planted_at": 0.0}
+
+
+func _is_valid_plot(plot: int) -> bool:
+	if plot < 0 or plot >= plots.size():
+		push_error("GameState: maceta inválida %d" % plot)
+		return false
+	return true
+
 
 ## Como can_afford(), pero emite un mensaje con lo que falta.
 func _require(costs: Dictionary) -> bool:
