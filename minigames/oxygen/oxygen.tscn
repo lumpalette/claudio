@@ -5,9 +5,15 @@
 [ext_resource type="Texture2D" uid="uid://c7g1pomj0rw8o" path="res://minigames/oxygen/assets/astronauta_tanque_hoja_5x1.png" id="2_a2a6g"]
 [ext_resource type="PackedScene" uid="uid://bpf3f2o7nyqog" path="res://minigames/oxygen/bolita.tscn" id="2_ajyvo"]
 [ext_resource type="Script" uid="uid://ocw35khcnqgr" path="res://minigames/oxygen/astronauta.gd" id="3_ajyvo"]
+[ext_resource type="FontFile" uid="uid://b2ws8ni1meg6y" path="res://shared/fonts/press_start_2p_regular.ttf" id="6_00f8i"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_j51rd"]
 size = Vector2(32, 10)
+
+[sub_resource type="LabelSettings" id="LabelSettings_or7ab"]
+font = ExtResource("6_00f8i")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Oxygen" type="Node2D" unique_id=1250481374]
 script = ExtResource("1_a2a6g")
@@ -37,6 +43,7 @@ offset_top = 140.0
 offset_right = 160.0
 offset_bottom = 163.0
 text = "Mision Cumplida"
+label_settings = SubResource("LabelSettings_or7ab")
 horizontal_alignment = 1
 vertical_alignment = 1
 

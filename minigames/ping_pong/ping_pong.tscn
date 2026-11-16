@@ -8,9 +8,13 @@
 
 [sub_resource type="LabelSettings" id="LabelSettings_4wnap"]
 font = ExtResource("5_or7ab")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_brm1d"]
 font = ExtResource("5_or7ab")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [node name="PingPong" type="Node2D" unique_id=1003788990]
 script = ExtResource("1_y4i01")
