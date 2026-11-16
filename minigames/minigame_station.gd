@@ -5,6 +5,7 @@ extends Interactable
 @export var minigame_scene: PackedScene
 
 var _game: Minigame
+var _layer: CanvasLayer
 
 
 func interact(_player: Player) -> bool:
@@ -23,19 +24,37 @@ func interact(_player: Player) -> bool:
 	_game = instance
 	_game.finished.connect(_on_finished, CONNECT_ONE_SHOT)
 
-	var layer := CanvasLayer.new()   # para que la cámara no lo mueva
-	layer.layer = 10
-	layer.process_mode = Node.PROCESS_MODE_ALWAYS
-	layer.add_child(_game)
-	get_tree().root.add_child(layer)
-	get_tree().paused = true
-	
+	# El minijuego va dentro de un SubViewport, que tiene su propio World2D.
+	# Así sus colisiones no chocan con las de la sala (el rayo del minijuego
+	# del agua se atoraba en las paredes de la sala de operaciones).
+	#
+	# Tampoco se pausa el árbol: al pausarlo, Godot apaga el servidor de
+	# físicas y los minijuegos dejan de detectar colisiones (el astronauta
+	# del oxígeno no atrapaba ninguna bolita). El jugador no se mueve porque
+	# se queda en el estado "wait" hasta que el minijuego termina, y el reloj
+	# lo pausa GameState.start_minigame().
+	_layer = CanvasLayer.new()
+	_layer.layer = 10
+	var container := SubViewportContainer.new()
+	container.set_anchors_preset(Control.PRESET_FULL_RECT)
+	container.stretch = true
+	_layer.add_child(container)
+	var viewport := SubViewport.new()
+	viewport.size = Vector2i(ProjectSettings.get_setting("display/window/size/viewport_width", 640),
+		ProjectSettings.get_setting("display/window/size/viewport_height", 360))
+	viewport.handle_input_locally = false
+	viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	container.add_child(viewport)
+	viewport.add_child(_game)
+	get_tree().root.add_child(_layer)
+
 	return true
 
+
 func _on_finished(value: float) -> void:
-	var layer := _game.get_parent()
 	_game = null
-	get_tree().paused = false
-	layer.queue_free()
+	if _layer:
+		_layer.queue_free()
+		_layer = null
 	GameState.finish_minigame(action_id, value)
 	interaction_ended.emit()

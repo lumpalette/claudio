@@ -118,7 +118,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		close_menu()
 	elif _pause.visible:
 		_resume_from_pause()
-	elif _game_active and not get_tree().paused and not _alert.visible and not _fade.visible:
+	elif _game_active and not get_tree().paused and not _alert.visible and not _fade.visible \
+			and get_tree().get_first_node_in_group(&"minigame") == null:
+		# Dentro de un minijuego, Esc lo abandona (lo maneja el minijuego).
 		_open_pause()
 	else:
 		return
