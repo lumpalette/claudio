@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://bpf3f2o7nyqog"]
+
+[ext_resource type="Script" uid="uid://b8t2uhw6y854h" path="res://oxygen/bolita.gd" id="1_iodkl"]
+[ext_resource type="Texture2D" uid="uid://dqrf1r6oek50r" path="res://assets/oxygen/bola_O.png" id="2_mfifn"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_j51rd"]
+radius = 4.0
+
+[node name="Bolita" type="Area2D" unique_id=568771237]
+script = ExtResource("1_iodkl")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=501067691]
+texture = ExtResource("2_mfifn")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1841573303]
+shape = SubResource("CircleShape2D_j51rd")

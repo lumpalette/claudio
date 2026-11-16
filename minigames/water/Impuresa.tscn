@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dxju7b7xq70qk"]
+
+[ext_resource type="Texture2D" uid="uid://ciqpngb1l3aax" path="res://Minijuegos/Water/Icon31_17.png" id="1_eq7m6"]
+[ext_resource type="Script" uid="uid://diapoijo4jquw" path="res://Minijuegos/Water/impuresa.gd" id="1_h7rjb"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0ovb"]
+radius = 17.117243
+
+[node name="Area2D" type="Area2D" unique_id=750090703 groups=["impuresas"]]
+script = ExtResource("1_h7rjb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=768353955]
+texture = ExtResource("1_eq7m6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=82014703]
+shape = SubResource("CircleShape2D_q0ovb")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

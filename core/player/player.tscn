@@ -5,16 +5,21 @@
 [ext_resource type="Script" uid="uid://p25ms5wm6m2n" path="res://core/state_machine.gd" id="3_sglur"]
 [ext_resource type="Script" uid="uid://cot16gdphic3e" path="res://core/player/states/move_state.gd" id="4_bls4j"]
 [ext_resource type="Script" uid="uid://bdxsxjnm62dlu" path="res://core/player/states/idle_state.gd" id="4_fkugw"]
+[ext_resource type="Script" uid="uid://dydwpiwam64fy" path="res://core/player/states/wait_state.gd" id="6_e7l0y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_it3rg"]
 size = Vector2(12, 10)
 
-[node name="Player" type="CharacterBody2D" unique_id=1796187236 node_paths=PackedStringArray("animator", "state")]
+[sub_resource type="CircleShape2D" id="CircleShape2D_pv2mu"]
+radius = 20.666668
+
+[node name="Player" type="CharacterBody2D" unique_id=1796187236 node_paths=PackedStringArray("animator", "interactor", "state")]
 y_sort_enabled = true
 scale = Vector2(1.5, 1.5)
 motion_mode = 1
 script = ExtResource("1_unhdg")
 animator = NodePath("AnimatedSprite2D")
+interactor = NodePath("Area2D")
 state = NodePath("States")
 max_speed = 200.0
 acceleration = 1750.0
@@ -30,6 +35,12 @@ offset = Vector2(0, -14)
 position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_it3rg")
 
+[node name="Area2D" type="Area2D" parent="." unique_id=1909411969]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=491997632]
+position = Vector2(0, -6)
+shape = SubResource("CircleShape2D_pv2mu")
+
 [node name="States" type="Node" parent="." unique_id=420423964]
 script = ExtResource("3_sglur")
 
@@ -39,4 +50,8 @@ _this = NodePath("../..")
 
 [node name="Move" type="Node" parent="States" unique_id=28691115 node_paths=PackedStringArray("_this")]
 script = ExtResource("4_bls4j")
+_this = NodePath("../..")
+
+[node name="Wait" type="Node" parent="States" unique_id=1874165524 node_paths=PackedStringArray("_this")]
+script = ExtResource("6_e7l0y")
 _this = NodePath("../..")

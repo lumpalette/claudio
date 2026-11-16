@@ -1,0 +1,222 @@
+[gd_scene load_steps=4 format=3]
+
+[ext_resource type="Script" path="res://cutscene/cutscene.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://cutscene/assets/ui/dialog_panel_ai.png" id="2_panel"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_title"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+bg_color = Color(0.035, 0.105, 0.19, 0.85)
+
+[node name="Cutscene" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Letterbox" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Stage" type="Control" parent="Root"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="World" type="Control" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Root/Stage/World"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Effects" type="Control" parent="Root/Stage/World"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+
+[node name="Character" type="TextureRect" parent="Root/Stage/World"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+offset_left = 330.0
+offset_top = 170.0
+offset_right = 374.0
+offset_bottom = 242.0
+mouse_filter = 2
+expand_mode = 1
+
+[node name="Flash" type="ColorRect" parent="Root/Stage/World"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(1, 0.188, 0.125, 0)
+
+[node name="UI" type="Control" parent="Root/Stage"]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+
+[node name="TitleBox" type="PanelContainer" parent="Root/Stage/UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 12.0
+offset_top = 14.0
+offset_right = 262.0
+offset_bottom = 40.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_title")
+
+[node name="HBox" type="HBoxContainer" parent="Root/Stage/UI/TitleBox"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="TitleNumber" type="Label" parent="Root/Stage/UI/TitleBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "01"
+
+[node name="Title" type="Label" parent="Root/Stage/UI/TitleBox/HBox"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 4
+text = "UN PEQUEÑO PASO"
+
+[node name="DialogPanel" type="TextureRect" parent="Root/Stage/UI"]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 244.0
+offset_right = 624.0
+offset_bottom = 352.0
+mouse_filter = 2
+texture = ExtResource("2_panel")
+
+[node name="SpeakerBar" type="ColorRect" parent="Root/Stage/UI/DialogPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 8.0
+offset_right = 12.0
+offset_bottom = 18.0
+mouse_filter = 2
+color = Color(0.3, 0.88, 0.95, 1)
+
+[node name="Speaker" type="Label" parent="Root/Stage/UI/DialogPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 18.0
+offset_top = 9.0
+offset_right = 300.0
+offset_bottom = 17.0
+text = "NARRADOR"
+
+[node name="Separator" type="ColorRect" parent="Root/Stage/UI/DialogPanel"]
+layout_mode = 0
+offset_left = 10.0
+offset_top = 22.0
+offset_right = 598.0
+offset_bottom = 23.0
+mouse_filter = 2
+color = Color(0.3, 0.88, 0.95, 0.35)
+
+[node name="DialogText" type="Label" parent="Root/Stage/UI/DialogPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 30.0
+offset_right = 592.0
+offset_bottom = 66.0
+text = "Claudio aterriza en una base lunar.
+Su misión: explorar y volver a casa."
+
+[node name="Progress" type="Label" parent="Root/Stage/UI/DialogPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 16.0
+offset_top = 80.0
+offset_right = 72.0
+offset_bottom = 88.0
+text = "1 / 5"
+
+[node name="ProgressDots" type="HBoxContainer" parent="Root/Stage/UI/DialogPanel"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 70.0
+offset_top = 82.0
+offset_right = 160.0
+offset_bottom = 85.0
+mouse_filter = 2
+theme_override_constants/separation = 4
+
+[node name="SkipButton" type="TextureButton" parent="Root/Stage/UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 296.0
+offset_top = 316.0
+offset_right = 384.0
+offset_bottom = 344.0
+focus_mode = 0
+
+[node name="BackButton" type="TextureButton" parent="Root/Stage/UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 392.0
+offset_top = 316.0
+offset_right = 492.0
+offset_bottom = 344.0
+focus_mode = 0
+
+[node name="NextButton" type="TextureButton" parent="Root/Stage/UI"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 498.0
+offset_top = 316.0
+offset_right = 624.0
+offset_bottom = 344.0
+focus_mode = 0
+
+[node name="Fade" type="ColorRect" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

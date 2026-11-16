@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cumqn0m4dfuho"]
+
+[ext_resource type="Script" uid="uid://ce0aykfapu34x" path="res://minigames/ping_pong/ping_pong.gd" id="1_y4i01"]
+[ext_resource type="Texture2D" uid="uid://cycawkjvon22f" path="res://minigames/ping_pong/assets/fondo_640x360.png" id="2_k4svs"]
+[ext_resource type="Texture2D" uid="uid://bxngx3y4q08ur" path="res://minigames/ping_pong/assets/paleta_jugador.png" id="3_ubp5t"]
+[ext_resource type="Texture2D" uid="uid://cfb8m7eordl1h" path="res://minigames/ping_pong/assets/pelota.png" id="4_xpy1r"]
+
+[node name="PingPong" type="Node2D" unique_id=1003788990]
+script = ExtResource("1_y4i01")
+
+[node name="Fondo" type="Sprite2D" parent="." unique_id=909271172]
+position = Vector2(320, 180)
+texture = ExtResource("2_k4svs")
+
+[node name="Paleta" type="Sprite2D" parent="." unique_id=1992877016]
+position = Vector2(28, 180)
+texture = ExtResource("3_ubp5t")
+
+[node name="Pelota" type="Sprite2D" parent="." unique_id=370932115]
+position = Vector2(320, 180)
+texture = ExtResource("4_xpy1r")
+
+[node name="Marcador" type="Label" parent="." unique_id=524001675]
+custom_minimum_size = Vector2(400, 60)
+offset_left = 170.0
+offset_top = 10.0
+offset_right = 210.0
+offset_bottom = 33.0
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Mensaje" type="Label" parent="." unique_id=1016041522]
+custom_minimum_size = Vector2(400, 60)
+offset_left = 120.0
+offset_top = 150.0
+offset_right = 160.0
+offset_bottom = 173.0
+horizontal_alignment = 1
+vertical_alignment = 1

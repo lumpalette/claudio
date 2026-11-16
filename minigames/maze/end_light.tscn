@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dbrcmufggpadt"]
+
+[ext_resource type="Script" uid="uid://dmqgtxf5rxg7s" path="res://minigames/maze/end_light.gd" id="1_k8en4"]
+[ext_resource type="Texture2D" uid="uid://cf4wjgl7ma875" path="res://minigames/assets/estrella_ojitos.png" id="2_f6j5d"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0ovb"]
+radius = 19.104973
+
+[node name="Final luz" type="Area2D" unique_id=68965482]
+script = ExtResource("1_k8en4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=924546747]
+shape = SubResource("CircleShape2D_q0ovb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1384856779]
+texture = ExtResource("2_f6j5d")

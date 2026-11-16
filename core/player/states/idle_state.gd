@@ -9,6 +9,9 @@ func enter() -> void:
 
 
 func physics_process(delta: float) -> void:
+	if _this.try_interact():
+		return
+	
 	var dir_vector: Vector2 = Input.get_vector("move_left", "move_right", "move_up", "move_down")
 
 	if dir_vector != Vector2.ZERO:

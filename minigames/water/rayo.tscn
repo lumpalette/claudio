@@ -1,0 +1,17 @@
+[gd_scene format=3 uid="uid://ctn4nvpiqe7yg"]
+
+[ext_resource type="Texture2D" uid="uid://bin3hjddaioaw" path="res://Minijuegos/Water/rayo_40x40.png" id="1_25jam"]
+[ext_resource type="Script" uid="uid://b26jj8ump7qu0" path="res://Minijuegos/Water/rayo.gd" id="1_bvpb4"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_q0ovb"]
+size = Vector2(20, 5)
+
+[node name="Rayo" type="CharacterBody2D" unique_id=1446209894 groups=["Player"]]
+script = ExtResource("1_bvpb4")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=15748656 groups=["Player"]]
+position = Vector2(0, 13.5)
+shape = SubResource("RectangleShape2D_q0ovb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1772664575 groups=["Player"]]
+texture = ExtResource("1_25jam")

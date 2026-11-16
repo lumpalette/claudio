@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bdruhqjqh82pl"]
+
+[ext_resource type="Script" uid="uid://d2l8704m16ycq" path="res://Minijuegos/Water/contador.gd" id="1_s46ts"]
+
+[node name="CanvasLayer" type="CanvasLayer" unique_id=1528554543 groups=["contador"]]
+script = ExtResource("1_s46ts")
+
+[node name="Control" type="Control" parent="." unique_id=1246768841]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="." unique_id=1150100882]
+offset_left = 571.0
+offset_top = 7.0
+offset_right = 658.0
+offset_bottom = 51.0
+theme_override_font_sizes/font_size = 24
+text = "0-0"
+
+[node name="LabelTimer" type="Label" parent="." unique_id=908309114]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = -2.0
+offset_right = 5.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "..."

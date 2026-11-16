@@ -11,8 +11,9 @@
 [ext_resource type="Texture2D" uid="uid://cmf1rjq62txkd" path="res://rooms/rest_room/decor/decor_armchair_beige.png" id="9_njk5c"]
 [ext_resource type="Texture2D" uid="uid://b7dlkx423svik" path="res://rooms/rest_room/decor/decor_plant_palm.png" id="12_njk5c"]
 [ext_resource type="Texture2D" uid="uid://cwxog5kauphp4" path="res://rooms/rest_room/pingpong/ping_pong_table_base.png" id="13_g6g51"]
+[ext_resource type="Script" uid="uid://b33mcxbavor3s" path="res://minigames/minigame_station.gd" id="14_qvni2"]
+[ext_resource type="PackedScene" uid="uid://chvfc1ghcn7nh" path="res://minigames/exercise/exercise.tscn" id="15_0sqw6"]
 [ext_resource type="Texture2D" uid="uid://cutc1mkwcv2nr" path="res://rooms/rest_room/pingpong/ping_pong_paddle_player.png" id="15_s520v"]
-[ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="16_0sqw6"]
 [ext_resource type="Texture2D" uid="uid://ckvsx6rpmjirv" path="res://rooms/rest_room/pingpong/ping_pong_paddle_rival.png" id="16_2fhqf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q13qe"]
@@ -390,6 +391,9 @@ size = Vector2(131, 54)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_426oi"]
 size = Vector2(113, 36)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_426oi"]
+radius = 67.0
+
 [node name="RestRoom" type="Node2D" unique_id=2091641607]
 y_sort_enabled = true
 
@@ -567,5 +571,10 @@ texture = ExtResource("5_x7pye")
 position = Vector2(0.5, -16.00003)
 shape = SubResource("RectangleShape2D_426oi")
 
-[node name="Player" parent="." unique_id=1796187236 instance=ExtResource("16_0sqw6")]
-position = Vector2(284, 236)
+[node name="Area2D" type="Area2D" parent="ExerciseBench" unique_id=1218091483]
+script = ExtResource("14_qvni2")
+action_id = "exercise"
+minigame_scene = ExtResource("15_0sqw6")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExerciseBench/Area2D" unique_id=1229260201]
+shape = SubResource("CircleShape2D_426oi")

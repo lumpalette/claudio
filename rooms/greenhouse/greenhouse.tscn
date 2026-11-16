@@ -16,6 +16,7 @@
 [ext_resource type="Texture2D" uid="uid://b4cy0vklq1m74" path="res://shared/textures/tile-B-05.png" id="14_4i7cx"]
 [ext_resource type="Texture2D" uid="uid://c86xfsmbf0gv3" path="res://shared/textures/10.png" id="15_0wras"]
 [ext_resource type="Texture2D" uid="uid://jmiedu8cjyb6" path="res://shared/textures/2.png" id="16_nsc5j"]
+[ext_resource type="Script" uid="uid://o8lrfv56mjbi" path="res://rooms/greenhouse/microwave.gd" id="17_rc36t"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5flt2"]
 texture = ExtResource("1_meudb")
@@ -64178,6 +64179,9 @@ size = Vector2(137.5, 25.5)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3kt2m"]
 size = Vector2(42, 33)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_426oi"]
+size = Vector2(60, 90)
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q0ovb"]
 size = Vector2(198, 172)
 
@@ -64257,6 +64261,13 @@ position = Vector2(604, 215.92)
 texture = ExtResource("16_nsc5j")
 region_enabled = true
 region_rect = Rect2(576, 192, 48, 48)
+
+[node name="Area2D" type="Area2D" parent="World/Microwave" unique_id=1013789041]
+script = ExtResource("17_rc36t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Microwave/Area2D" unique_id=1080683388]
+position = Vector2(-2, 24.080002)
+shape = SubResource("RectangleShape2D_426oi")
 
 [node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=2000554243]
 

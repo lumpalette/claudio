@@ -1,7 +1,10 @@
 class_name Balance
 extends RefCounted
+## Todas las constantes del juego "Sobrevive 7 días".
+## Si un número afecta el balance, vive aquí y en ningún otro lado.
 
-## Statistics names.
+
+# --- Nombres de estados (usar siempre estas constantes, nunca texto suelto) ---
 const SATIETY := &"satiety"
 const HYDRATION := &"hydration"
 const REST := &"rest"
@@ -10,17 +13,17 @@ const STATION_OXYGEN := &"station_oxygen"
 const STATION_WATER := &"station_water"
 const STATION_ENERGY := &"station_energy"
 
-## HUD statistics.
+## Estados que se muestran en el HUD (en este orden).
 const HUD_STATS: Array[StringName] = [SATIETY, HYDRATION, STATION_OXYGEN, WELLBEING]
 
-## Vital statistics, from the player.
+## Estados que causan game over al llegar a 0, con su razón.
 const FATAL_STATS := {
 	SATIETY: "starvation",
 	HYDRATION: "dehydration",
 	STATION_OXYGEN: "suffocation",
 }
 
-## Initial states for statistics.
+## Valores al iniciar una partida.
 const START_STATS := {
 	SATIETY: 100.0,
 	HYDRATION: 100.0,
@@ -31,7 +34,8 @@ const START_STATS := {
 	STATION_ENERGY: 100.0,
 }
 
-## Maximum quantity for all statistics.
+## Máximo de cada estado al iniciar. El máximo actual lo guarda GameState,
+## porque el del bienestar baja a RADIATION_WELLBEING_MAX con la radiación.
 const STAT_MAX := {
 	SATIETY: 100.0,
 	HYDRATION: 100.0,
@@ -43,7 +47,7 @@ const STAT_MAX := {
 }
 
 
-## Time constants.
+# --- Tiempo ---
 const DAY_LENGTH_SECONDS := 360.0  # demo: 120.0
 const SECONDS_PER_GAME_HOUR := DAY_LENGTH_SECONDS / 24.0
 const START_HOUR := 6.0
@@ -53,7 +57,7 @@ const RADIATION_DAY := 5
 const RADIATION_HOUR := (RADIATION_DAY - 1) * 24.0 + 6.0  # 102
 const TIME_STEP := 0.25
 
-## Duration of every action.
+## Horas de juego que dura cada acción.
 const ACTION_HOURS := {
 	"eat": 0.5,
 	"drink": 0.5,
@@ -63,11 +67,13 @@ const ACTION_HOURS := {
 	"puzzle": 1.0,
 	"filter_water": 1.0,
 	"ping_pong": 1.0,
+	"oxygen": 1.0,
+	"exercise": 1.0,
 	"sleep": 8.0,
 	"faint": 12.0,
 }
 
-## Statistic decay when [awake, sleeping]. Negative means the stat goes up.
+## Desgaste por hora: [despierto, dormido]. Negativo = sube.
 const DECAY := {
 	SATIETY: [1.0, 0.5],
 	HYDRATION: [3.0, 1.5],
@@ -77,18 +83,18 @@ const DECAY := {
 }
 
 
-## Satiety and satisfaction constants.
-const SATIETY_SATISFIED_THRESHOLD := 70.0  # >= 70 means satisfied.
-const SATIETY_HUNGRY_THRESHOLD := 40.0     # >= 40 means you have hunger; < 40 means fatal
+# --- Saciedad y bienestar ---
+const SATIETY_SATISFIED_THRESHOLD := 70.0  # >= 70: "Satisfecho"
+const SATIETY_HUNGRY_THRESHOLD := 40.0     # >= 40: "Con hambre"; < 40: "Hambriento"
 const SATIETY_STATE_SATISFIED := "Satisfecho"
 const SATIETY_STATE_HUNGRY := "Con hambre"
 const SATIETY_STATE_STARVING := "Hambriento"
 
-## Satiety decay produced by performing actions.
+## Costo de saciedad por acción según el estado.
 const ACTION_SATIETY_COST_SATISFIED := 5.0
 const ACTION_SATIETY_COST_HUNGRY := 7.0
 const ACTION_SATIETY_COST_STARVING := 10.0
-const SATIETY_COST_ACTIONS := ["electrolysis", "puzzle", "filter_water", "harvest"]
+const SATIETY_COST_ACTIONS := ["electrolysis", "oxygen", "puzzle", "filter_water", "harvest"]
 
 const LOW_WELLBEING_THRESHOLD := 40.0
 const LOW_WELLBEING_SATIETY_MULT := 1.5
@@ -98,14 +104,14 @@ const LOW_REST_WARNING := 20.0   # "Estás muy cansado, ve a dormir"
 const FULL_WARNING := 90.0       # "Ya estás lleno"
 
 
-# Sleep constants.
+# --- Sueño ---
 const SLEEP_MAX_REST := 70.0
 const SLEEP_FROM_HOUR := 20.0
 const SLEEP_UNTIL_HOUR := 6.0
 const FAINT_WELLBEING_PENALTY := 10.0
 
 
-# Operation constants.
+# --- Operaciones ---
 const ELECTROLYSIS_WATER_COST := 10.0
 const ELECTROLYSIS_ENERGY_COST := 5.0
 const ELECTROLYSIS_OXYGEN := 50.0
@@ -114,6 +120,15 @@ const FILTER_ENERGY_COST := 5.0
 const FILTER_WATER := 35.0
 const PING_PONG_MIN := 15.0
 const PING_PONG_MAX := 25.0
+
+# Minijuego "oxygen": genera oxígeno (mismos valores que la electrólisis)
+const OXYGEN_WATER_COST := 10.0
+const OXYGEN_ENERGY_COST := 5.0
+const OXYGEN_REWARD := 50.0
+
+# Minijuego "exercise": sube el bienestar (mismos valores que el ping pong)
+const EXERCISE_MIN := 15.0
+const EXERCISE_MAX := 25.0
 
 ## Resultado de un minijuego: nunca 0, para que nadie se quede atorado.
 const MINIGAME_MIN_RESULT := 0.5

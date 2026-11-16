@@ -187,7 +187,7 @@ func apply_action_cost(action_id: String) -> void:
 
 # --- Sala de operaciones y minijuegos --------------------------------------
 
-## Llamar al abrir un minijuego ("electrolysis", "puzzle" o "ping_pong").
+## Llamar al abrir un minijuego ("electrolysis", "oxygen", "puzzle", "ping_pong" o "exercise").
 ## Cobra el costo al empezar (salir a la mitad no regala recursos) y pausa el reloj.
 ## Devuelve false (y emite message) si no alcanza.
 func start_minigame(action_id: String) -> bool:
@@ -202,7 +202,15 @@ func start_minigame(action_id: String) -> bool:
 			if not _require(costs):
 				return false
 			spend(costs)
-		"puzzle", "ping_pong":
+		"oxygen":
+			var costs := {
+				Balance.STATION_WATER: Balance.OXYGEN_WATER_COST,
+				Balance.STATION_ENERGY: Balance.OXYGEN_ENERGY_COST,
+			}
+			if not _require(costs):
+				return false
+			spend(costs)
+		"puzzle", "ping_pong", "exercise":
 			pass
 		_:
 			push_error("GameState.start_minigame: minijuego desconocido '%s'" % action_id)
@@ -218,10 +226,14 @@ func finish_minigame(action_id: String, result: float) -> void:
 	match action_id:
 		"electrolysis":
 			change_stat(Balance.STATION_OXYGEN, Balance.ELECTROLYSIS_OXYGEN * result)
+		"oxygen":
+			change_stat(Balance.STATION_OXYGEN, Balance.OXYGEN_REWARD * result)
 		"puzzle":
 			change_stat(Balance.STATION_ENERGY, Balance.PUZZLE_ENERGY * result)
 		"ping_pong":
 			change_stat(Balance.WELLBEING, lerpf(Balance.PING_PONG_MIN, Balance.PING_PONG_MAX, result))
+		"exercise":
+			change_stat(Balance.WELLBEING, lerpf(Balance.EXERCISE_MIN, Balance.EXERCISE_MAX, result))
 		_:
 			push_error("GameState.finish_minigame: minijuego desconocido '%s'" % action_id)
 	apply_action_cost(action_id)

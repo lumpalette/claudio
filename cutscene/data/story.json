@@ -1,0 +1,161 @@
+{
+  "resolution": { "width": 640, "height": 360 },
+  "advance": "manual",
+  "transition_ms": 280,
+  "type_speed": 40,
+  "scenes": [
+    {
+      "id": "01_arrival",
+      "number": "01",
+      "title": "UN PEQUEÑO PASO",
+      "speaker": "NARRADOR",
+      "lines": [
+        "Claudio aterriza en una base lunar.",
+        "Su misión: explorar y volver a casa."
+      ],
+      "background": "res://cutscene/assets/backgrounds/01_arrival_ai.png",
+      "background_hd": "res://cutscene/assets/originals/01_arrival_ai.png",
+      "character": null,
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "disabled" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.12, "focus": [180, 110], "duration": 4.0 },
+        "title_delay": 0.6,
+        "text_delay": 0.9
+      }
+    },
+    {
+      "id": "02_breakdown",
+      "number": "02",
+      "title": "NO HAY VUELTA ATRÁS",
+      "speaker": "NARRADOR",
+      "lines": [
+        "Una avería deja la nave fuera de servicio.",
+        "Claudio está atrapado en la Luna."
+      ],
+      "background": "res://cutscene/assets/backgrounds/02_breakdown_ai.png",
+      "background_hd": "res://cutscene/assets/originals/02_breakdown_ai.png",
+      "character": { "x": 330, "y": 170, "anim": "fade_in", "delay": 1.0 },
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.06, "focus": [210, 180], "duration": 2.5 },
+        "shake": { "strength": 4, "duration": 0.5, "delay": 0.35 },
+        "flash": { "color": "#ff3020", "alpha": 0.45, "count": 2, "delay": 0.35 },
+        "sparks": { "x": 207, "y": 178, "interval": 1.1 },
+        "title_delay": 0.2,
+        "text_delay": 0.9
+      }
+    },
+    {
+      "id": "03_distress",
+      "number": "03",
+      "title": "SEÑAL DE AUXILIO",
+      "speaker": "CLAUDIO",
+      "lines": [
+        "Base, ¿me reciben? Necesito ayuda.",
+        "Claudio logra contactar con la Tierra."
+      ],
+      "background": "res://cutscene/assets/backgrounds/03_distress_ai.png",
+      "background_hd": "res://cutscene/assets/originals/03_distress_ai.png",
+      "character": { "x": 340, "y": 170, "anim": "breathe", "delay": 0.0 },
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.06, "focus": [520, 90], "duration": 3.0 },
+        "signal_waves": { "x": 522, "y": 84, "interval": 0.7 },
+        "title_delay": 0.2,
+        "text_delay": 0.5
+      }
+    },
+    {
+      "id": "04_rescue",
+      "number": "04",
+      "title": "SIETE DÍAS",
+      "speaker": "CONTROL DE MISIÓN",
+      "lines": [
+        "Rescate en camino. Llegaremos en 7 días.",
+        "Hasta entonces, tendrás que resistir."
+      ],
+      "background": "res://cutscene/assets/backgrounds/04_rescue_ai.png",
+      "background_hd": "res://cutscene/assets/originals/04_rescue_ai.png",
+      "character": { "x": 370, "y": 170, "anim": "walk_in", "from_x": 250, "duration": 1.8, "delay": 0.3 },
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.08, "focus": [495, 120], "duration": 3.0 },
+        "glow": { "x": 495, "y": 112, "radius": 70, "color": "#4de2f1" },
+        "title_delay": 0.2,
+        "text_delay": 0.6
+      }
+    },
+    {
+      "id": "05_survival",
+      "number": "05",
+      "title": "TU MISIÓN COMIENZA",
+      "speaker": "TU OBJETIVO",
+      "lines": [
+        "Cuida el oxígeno, el agua y la energía.",
+        "Mantén los cultivos vivos. Sobrevive 7 días."
+      ],
+      "background": "res://cutscene/assets/backgrounds/05_survival_ai.png",
+      "background_hd": "res://cutscene/assets/originals/05_survival_ai.png",
+      "character": { "x": 455, "y": 170, "anim": "walk_in", "from_x": 380, "duration": 1.4, "delay": 0.3 },
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "play", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.06, "focus": [320, 200], "duration": 3.0 },
+        "pulse_play": true,
+        "title_delay": 0.2,
+        "text_delay": 0.6
+      }
+    }
+  ],
+  "buttons": {
+    "back": {
+      "normal": "res://cutscene/assets/ui/button_back_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_back_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_back_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_back_disabled_ai.png"
+    },
+    "next": {
+      "normal": "res://cutscene/assets/ui/button_next_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_next_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_next_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_next_disabled_ai.png"
+    },
+    "skip": {
+      "normal": "res://cutscene/assets/ui/button_skip_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_skip_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_skip_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_skip_disabled_ai.png"
+    },
+    "play": {
+      "normal": "res://cutscene/assets/ui/button_play_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_play_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_play_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_play_disabled_ai.png"
+    }
+  },
+  "events": {
+    "next": "next scene; on the last scene emits finished(false)",
+    "back": "previous scene; disabled on the first one",
+    "skip": "emits finished(true)",
+    "play": "emits finished(false)"
+  }
+}

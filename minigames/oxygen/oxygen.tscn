@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://q1tobddhs0cl"]
+
+[ext_resource type="Script" uid="uid://chg1fe5f46flc" path="res://minigames/oxygen/oxygen.gd" id="1_a2a6g"]
+[ext_resource type="Texture2D" uid="uid://2vlruplhbsdm" path="res://minigames/oxygen/assets/fondo_gases_640x360.png" id="1_n5ufc"]
+[ext_resource type="Texture2D" uid="uid://c7g1pomj0rw8o" path="res://minigames/oxygen/assets/astronauta_tanque_hoja_5x1.png" id="2_a2a6g"]
+[ext_resource type="PackedScene" uid="uid://bpf3f2o7nyqog" path="res://minigames/oxygen/bolita.tscn" id="2_ajyvo"]
+[ext_resource type="Script" uid="uid://ocw35khcnqgr" path="res://minigames/oxygen/astronauta.gd" id="3_ajyvo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_j51rd"]
+size = Vector2(32, 10)
+
+[node name="Oxygen" type="Node2D" unique_id=1250481374]
+script = ExtResource("1_a2a6g")
+escena_bolita = ExtResource("2_ajyvo")
+
+[node name="Fondo" type="Sprite2D" parent="." unique_id=429882784]
+texture = ExtResource("1_n5ufc")
+centered = false
+
+[node name="Astronauta" type="Area2D" parent="." unique_id=694480608]
+position = Vector2(320, 286)
+script = ExtResource("3_ajyvo")
+
+[node name="Sprite2D" type="Sprite2D" parent="Astronauta" unique_id=853032028]
+texture = ExtResource("2_a2a6g")
+offset = Vector2(0, 29)
+hframes = 5
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Astronauta" unique_id=1426419591]
+position = Vector2(0, 5)
+shape = SubResource("RectangleShape2D_j51rd")
+
+[node name="Mensaje" type="Label" parent="." unique_id=1511838160]
+custom_minimum_size = Vector2(400, 80)
+offset_left = 120.0
+offset_top = 140.0
+offset_right = 160.0
+offset_bottom = 163.0
+text = "Mision Cumplida"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TemporizadorSpawn" type="Timer" parent="." unique_id=703541935]

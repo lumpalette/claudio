@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://b5gorjgfwrkvx"]
+
+[ext_resource type="Script" uid="uid://6wla1tyolm7y" path="res://minigames/maze/sun.gd" id="1_up6tu"]
+[ext_resource type="Texture2D" path="res://Minijuegos/assets/rayo_sol.png" id="2_n85ou"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q0ovb"]
+radius = 16.27882
+
+[node name="sun" type="CharacterBody2D" unique_id=889412201]
+script = ExtResource("1_up6tu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1299404109]
+position = Vector2(147, 57)
+shape = SubResource("CircleShape2D_q0ovb")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=630125215]
+position = Vector2(128, 58.000004)
+scale = Vector2(1.6408849, 1.597265)
+texture = ExtResource("2_n85ou")
