@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://c7axd0f1cyk8p"]
+
+[node name="StatBar" type="VBoxContainer" unique_id=1521975559]
+
+[node name="Label" type="Label" parent="." unique_id=711419115]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="." unique_id=419004339]
+layout_mode = 2

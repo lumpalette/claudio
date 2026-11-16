@@ -4,6 +4,13 @@
 [ext_resource type="Texture2D" uid="uid://cycawkjvon22f" path="res://minigames/ping_pong/assets/fondo_640x360.png" id="2_k4svs"]
 [ext_resource type="Texture2D" uid="uid://bxngx3y4q08ur" path="res://minigames/ping_pong/assets/paleta_jugador.png" id="3_ubp5t"]
 [ext_resource type="Texture2D" uid="uid://cfb8m7eordl1h" path="res://minigames/ping_pong/assets/pelota.png" id="4_xpy1r"]
+[ext_resource type="FontFile" uid="uid://b2ws8ni1meg6y" path="res://shared/fonts/press_start_2p_regular.ttf" id="5_or7ab"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4wnap"]
+font = ExtResource("5_or7ab")
+
+[sub_resource type="LabelSettings" id="LabelSettings_brm1d"]
+font = ExtResource("5_or7ab")
 
 [node name="PingPong" type="Node2D" unique_id=1003788990]
 script = ExtResource("1_y4i01")
@@ -22,10 +29,11 @@ texture = ExtResource("4_xpy1r")
 
 [node name="Marcador" type="Label" parent="." unique_id=524001675]
 custom_minimum_size = Vector2(400, 60)
-offset_left = 170.0
-offset_top = 10.0
-offset_right = 210.0
-offset_bottom = 33.0
+offset_left = 90.0
+offset_top = 13.0
+offset_right = 490.0
+offset_bottom = 73.0
+label_settings = SubResource("LabelSettings_4wnap")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -35,5 +43,6 @@ offset_left = 120.0
 offset_top = 150.0
 offset_right = 160.0
 offset_bottom = 173.0
+label_settings = SubResource("LabelSettings_brm1d")
 horizontal_alignment = 1
 vertical_alignment = 1

@@ -12,6 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://b7dlkx423svik" path="res://rooms/rest_room/decor/decor_plant_palm.png" id="12_njk5c"]
 [ext_resource type="Texture2D" uid="uid://cwxog5kauphp4" path="res://rooms/rest_room/pingpong/ping_pong_table_base.png" id="13_g6g51"]
 [ext_resource type="Script" uid="uid://b33mcxbavor3s" path="res://minigames/minigame_station.gd" id="14_qvni2"]
+[ext_resource type="PackedScene" uid="uid://cumqn0m4dfuho" path="res://minigames/ping_pong/ping_pong.tscn" id="14_rb3m3"]
 [ext_resource type="PackedScene" uid="uid://chvfc1ghcn7nh" path="res://minigames/exercise/exercise.tscn" id="15_0sqw6"]
 [ext_resource type="Texture2D" uid="uid://cutc1mkwcv2nr" path="res://rooms/rest_room/pingpong/ping_pong_paddle_player.png" id="15_s520v"]
 [ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="16_0sqw6"]
@@ -389,6 +390,9 @@ size = Vector2(39.327744, 77.08105)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pv2mu"]
 size = Vector2(131, 54)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_0sqw6"]
+radius = 85.02353
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_426oi"]
 size = Vector2(113, 36)
 
@@ -559,6 +563,15 @@ offset = Vector2(0, -45)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="PingPongTable" unique_id=377018232]
 position = Vector2(0, -26)
 shape = SubResource("RectangleShape2D_pv2mu")
+
+[node name="Area2D" type="Area2D" parent="PingPongTable" unique_id=565799290]
+position = Vector2(1, -39)
+script = ExtResource("14_qvni2")
+action_id = "ping_pong"
+minigame_scene = ExtResource("14_rb3m3")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PingPongTable/Area2D" unique_id=1247191766]
+shape = SubResource("CircleShape2D_0sqw6")
 
 [node name="ExerciseBench" type="StaticBody2D" parent="." unique_id=2092568547]
 y_sort_enabled = true
