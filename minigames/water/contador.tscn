@@ -1,6 +1,17 @@
 [gd_scene format=3 uid="uid://bdruhqjqh82pl"]
 
 [ext_resource type="Script" uid="uid://d2l8704m16ycq" path="res://minigames/water/contador.gd" id="1_s46ts"]
+[ext_resource type="FontFile" uid="uid://b2ws8ni1meg6y" path="res://shared/fonts/press_start_2p_regular.ttf" id="2_hndnp"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ajsvc"]
+font = ExtResource("2_hndnp")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_nwywj"]
+font = ExtResource("2_hndnp")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1528554543 groups=["contador"]]
 script = ExtResource("1_s46ts")
@@ -14,22 +25,24 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Label" type="Label" parent="." unique_id=1150100882]
-offset_left = 571.0
-offset_top = 7.0
-offset_right = 658.0
-offset_bottom = 51.0
+offset_left = 425.0
+offset_top = 339.0
+offset_right = 512.0
+offset_bottom = 383.0
 theme_override_font_sizes/font_size = 24
 text = "0-0"
+label_settings = SubResource("LabelSettings_ajsvc")
 
 [node name="LabelTimer" type="Label" parent="." unique_id=908309114]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 5.0
-offset_top = -2.0
-offset_right = 5.0
-offset_bottom = -2.0
+offset_left = 199.0
+offset_top = 335.0
+offset_right = 199.0
+offset_bottom = 335.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 24
 text = "..."
+label_settings = SubResource("LabelSettings_nwywj")

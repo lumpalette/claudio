@@ -73,7 +73,7 @@ const ACTION_HOURS := {
 const DECAY := {
 	SATIETY: [1.5, 0.6],
 	HYDRATION: [3.5, 1.5],
-	REST: [3.5, -10.0],
+	REST: [3.5, -12.5],
 	WELLBEING: [2.0, 0.3],
 	STATION_OXYGEN: [2.3, 2.2],
 }
