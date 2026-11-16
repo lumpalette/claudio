@@ -2,18 +2,26 @@ extends Node
 ## Escena principal: menú LOBEL -> cinemática -> juego -> final -> menú.
 ## También cambia de sala cuando el jugador usa una puerta (ver core/door.gd).
 
+## El vestíbulo es el centro: desde ahí se llega a las otras tres salas.
 const ROOMS := {
+	&"lobby": {"scene": "res://rooms/lobby/lobby.tscn", "name": "Vestíbulo"},
 	&"rest_room": {"scene": "res://rooms/rest_room/rest_room.tscn", "name": "Dormitorio"},
 	&"operations": {"scene": "res://rooms/operations/operations.tscn", "name": "Sala de operaciones"},
 	&"greenhouse": {"scene": "res://rooms/greenhouse/greenhouse.tscn", "name": "Invernadero y cocina"},
 }
-## Dónde aparece el jugador según la sala de la que viene.
+## Dónde aparece el jugador según la sala de la que viene: junto a la puerta
+## por la que acaba de entrar.
 const SPAWNS := {
-	&"rest_room": {&"operations": Vector2(60, 172)},
-	&"operations": {&"rest_room": Vector2(60, 172), &"greenhouse": Vector2(588, 172)},
-	&"greenhouse": {&"operations": Vector2(336, 316)},
+	&"lobby": {
+		&"rest_room": Vector2(52, 285),
+		&"greenhouse": Vector2(594, 285),
+		&"operations": Vector2(320, 322),
+	},
+	&"rest_room": {&"lobby": Vector2(60, 172)},
+	&"operations": {&"lobby": Vector2(80, 172)},
+	&"greenhouse": {&"lobby": Vector2(336, 316)},
 }
-const START_ROOM := &"rest_room"
+const START_ROOM := &"lobby"
 const MENU_SCENE := preload("res://menu/main_menu.tscn")
 const ENDING_SCENE := preload("res://cutscene/ending.tscn")
 

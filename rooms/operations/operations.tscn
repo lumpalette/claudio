@@ -20784,22 +20784,22 @@ shape = SubResource("RectangleShape2D_426oi")
 position = Vector2(255, 160.5)
 shape = SubResource("RectangleShape2D_vkyei")
 
-[node name="DoorToRestRoom" type="Area2D" parent="."]
+[node name="DoorToLobby" type="Area2D" parent="."]
 position = Vector2(48, 150)
 script = ExtResource("x_door")
-prompt = "Ir al Dormitorio"
-target_room = &"rest_room"
+prompt = "Ir al Vestíbulo"
+target_room = &"lobby"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorToRestRoom"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorToLobby"]
 shape = SubResource("x_door_shape")
 
-[node name="DoorToGreenhouse" type="Area2D" parent="."]
+[node name="DoorToLobby2" type="Area2D" parent="."]
 position = Vector2(605, 150)
 script = ExtResource("x_door")
-prompt = "Ir al Invernadero"
-target_room = &"greenhouse"
+prompt = "Ir al Vestíbulo"
+target_room = &"lobby"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorToGreenhouse"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorToLobby2"]
 shape = SubResource("x_door_shape")
 
 [node name="WaterPurifier" type="Area2D" parent="World/Machine"]
