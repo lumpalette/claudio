@@ -407,6 +407,9 @@ size = Vector2(48, 28)
 [sub_resource type="RectangleShape2D" id="x_bed_shape"]
 size = Vector2(50, 70)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_door_block"]
+size = Vector2(48, 140)
+
 [node name="RestRoom" type="Node2D" unique_id=2091641607]
 y_sort_enabled = true
 
@@ -438,6 +441,12 @@ position = Vector2(652, 180)
 [node name="WallRight" type="CollisionShape2D" parent="Walls/WallRightSB" unique_id=65595485]
 position = Vector2(8, 2)
 shape = SubResource("RectangleShape2D_j5ixc")
+
+[node name="DoorBlockSB" type="StaticBody2D" parent="Walls"]
+
+[node name="DoorBlock" type="CollisionShape2D" parent="Walls/DoorBlockSB"]
+position = Vector2(24, 70)
+shape = SubResource("RectangleShape2D_door_block")
 
 [node name="WallLeftSB" type="StaticBody2D" parent="Walls" unique_id=1925004580]
 collision_mask = 0

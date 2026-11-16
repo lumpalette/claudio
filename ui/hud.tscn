@@ -12,4 +12,17 @@ script = ExtResource("1_hud")
 start_clock_on_ready = false
 day_format = "DIA %d"
 
+[node name="Clock" parent="HudClock/Root" index="0"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -164.0
+offset_top = 4.0
+offset_right = -4.0
+offset_bottom = 84.0
+grow_horizontal = 0
+grow_vertical = 1
+
 [node name="FaintScreen" parent="." instance=ExtResource("3_faint")]

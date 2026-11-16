@@ -6,7 +6,6 @@ extends CanvasLayer
 ##
 ## Las estaciones la buscan con Hud.find(self) para abrir menús.
 
-signal play_requested
 signal retry_requested
 signal title_requested
 
@@ -75,8 +74,6 @@ var _end: ColorRect
 var _end_title: Label
 var _end_body: Label
 var _end_retry: Button
-var _title: Control
-var _title_play: Button
 var _clock: CanvasLayer
 var _blink_time := 0.0
 var _game_active := false
@@ -97,10 +94,9 @@ func _ready() -> void:
 	GameState.stat_changed.connect(_on_stat_changed)
 	GameState.message.connect(show_toast)
 	GameState.game_over.connect(_on_game_over)
-	GameState.victory.connect(_on_victory)
 	TimeManager.radiation_started.connect(_on_radiation)
 	refresh_stats()
-	show_title()
+	hide_all()
 
 
 func _process(delta: float) -> void:
@@ -131,19 +127,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 # --- API para main.gd ------------------------------------------------------
 
-func show_title() -> void:
-	_game_active = false
-	_hide_overlays()
-	_end.hide()
-	_game_ui.hide()
-	_set_clock_visible(false)
-	_title.show()
-	_title_play.grab_focus.call_deferred()
-
-
 func show_game(room_name: String) -> void:
 	_game_active = true
-	_title.hide()
 	_end.hide()
 	_hide_overlays()
 	_game_ui.show()
@@ -154,7 +139,6 @@ func show_game(room_name: String) -> void:
 
 func hide_all() -> void:
 	_game_active = false
-	_title.hide()
 	_end.hide()
 	_hide_overlays()
 	_game_ui.hide()
@@ -285,10 +269,6 @@ func _on_game_over(reason: String) -> void:
 	_show_end(false, GAME_OVER_TEXT.get(reason, "La misión fracasó."))
 
 
-func _on_victory() -> void:
-	_show_end(true, "Claudio sobrevivió %d días en la estación\nhasta que llegó el rescate." % Balance.TOTAL_DAYS)
-
-
 func _show_end(won: bool, text: String) -> void:
 	_game_active = false
 	_close_menu_silently()
@@ -296,10 +276,7 @@ func _show_end(won: bool, text: String) -> void:
 	_pause.hide()
 	_end_title.text = "¡MISION CUMPLIDA!" if won else "MISION FALLIDA"
 	_end_title.add_theme_color_override(&"font_color", COLOR_GOOD if won else COLOR_DANGER)
-	if won:
-		_end_body.text = text
-	else:
-		_end_body.text = "%s\n\nResististe hasta el %s" % [text, TimeManager.get_clock_text()]
+	_end_body.text = "%s\n\nResististe hasta el %s" % [text, TimeManager.get_clock_text()]
 	_end.show()
 	_end.modulate.a = 0.0
 	create_tween().tween_property(_end, "modulate:a", 1.0, 0.8)
@@ -341,7 +318,7 @@ func _show_controls() -> void:
 
 func _hide_controls() -> void:
 	_controls.hide()
-	_focus_first(_title if _title.visible else _pause)
+	_focus_first(_pause)
 
 
 func _open_pause() -> void:
@@ -442,7 +419,6 @@ func _build() -> void:
 	_build_alert()
 	_build_pause()
 	_build_end()
-	_build_title()
 	_build_controls()
 
 
@@ -484,12 +460,12 @@ func _build_game_ui() -> void:
 	_toasts.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_game_ui.add_child(_toasts)
 
-	# Indicador de interacción (encima del reloj)
+	# Indicador de interacción (abajo al centro)
 	_prompt_panel = _panel(COLOR_PANEL, COLOR_ACCENT)
 	_prompt_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	_prompt_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_prompt_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	_prompt_panel.position.y = -96
+	_prompt_panel.position.y = -8
 	_prompt_label = _label("", Color.WHITE)
 	_prompt_panel.add_child(_prompt_label)
 	_prompt_panel.hide()
@@ -621,61 +597,6 @@ func _build_end() -> void:
 	var menu := _button("Menú principal")
 	menu.pressed.connect(func() -> void: title_requested.emit())
 	vbox.add_child(menu)
-
-
-func _build_title() -> void:
-	_title = Control.new()
-	_title.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_root.add_child(_title)
-
-	var bg := TextureRect.new()
-	bg.texture = load("res://cutscene/assets/backgrounds/01_arrival_ai.png")
-	bg.set_anchors_preset(Control.PRESET_FULL_RECT)
-	bg.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-	bg.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_COVERED
-	_title.add_child(bg)
-	var shade := ColorRect.new()
-	shade.color = Color(0.02, 0.04, 0.10, 0.55)
-	shade.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_title.add_child(shade)
-
-	var center := CenterContainer.new()
-	center.set_anchors_preset(Control.PRESET_FULL_RECT)
-	_title.add_child(center)
-	var vbox := VBoxContainer.new()
-	vbox.add_theme_constant_override(&"separation", 8)
-	center.add_child(vbox)
-
-	var title := _label("CLAUDIO", COLOR_ACCENT)
-	title.add_theme_font_size_override(&"font_size", 32)
-	title.add_theme_color_override(&"font_outline_color", Color(0.02, 0.05, 0.12))
-	title.add_theme_constant_override(&"outline_size", 8)
-	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(title)
-	var subtitle := _label("Sobrevive %d días en la estación espacial" % Balance.TOTAL_DAYS, COLOR_TEXT)
-	subtitle.add_theme_color_override(&"font_outline_color", Color(0.02, 0.05, 0.12))
-	subtitle.add_theme_constant_override(&"outline_size", 4)
-	subtitle.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	vbox.add_child(subtitle)
-	var spacer := Control.new()
-	spacer.custom_minimum_size.y = 12
-	vbox.add_child(spacer)
-
-	var buttons := VBoxContainer.new()
-	buttons.add_theme_constant_override(&"separation", 4)
-	buttons.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	buttons.custom_minimum_size.x = 160
-	vbox.add_child(buttons)
-	_title_play = _button("Jugar")
-	_title_play.pressed.connect(func() -> void: play_requested.emit())
-	buttons.add_child(_title_play)
-	var controls := _button("Controles")
-	controls.pressed.connect(_show_controls)
-	buttons.add_child(controls)
-	if not OS.has_feature("web"):
-		var quit := _button("Salir")
-		quit.pressed.connect(func() -> void: get_tree().quit())
-		buttons.add_child(quit)
 
 
 # --- Helpers ----------------------------------------------------------------

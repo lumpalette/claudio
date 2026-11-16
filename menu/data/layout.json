@@ -1,0 +1,20 @@
+{
+  "canvas": { "width": 640, "height": 360 },
+  "origin": "top-left",
+  "filter": "nearest",
+  "background": "res://menu/assets/background_ai.png",
+  "layers": [
+    { "id": "logo", "x": 4, "y": 3, "w": 262, "h": 125, "file": "res://menu/assets/logo_lobel_ai.png" },
+    { "id": "start_button", "x": 34, "y": 149, "w": 204, "h": 61, "file": "res://menu/assets/button_start_ai.png" },
+    { "id": "exit_button", "x": 36, "y": 210, "w": 200, "h": 54, "file": "res://menu/assets/button_exit_ai.png" },
+    { "id": "astronaut", "x": 250, "y": 226, "w": 64, "h": 105, "file": "res://menu/assets/astronaut_menu_ai.png" }
+  ],
+  "stars": {
+    "count": 14,
+    "area": [280, 8, 630, 92],
+    "avoid": [
+      { "x": 350, "y": 58, "radius": 38 },
+      { "x": 520, "y": 85, "radius": 40 }
+    ]
+  }
+}

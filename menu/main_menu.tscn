@@ -1,0 +1,109 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://menu/main_menu.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://menu/assets/background_ai.png" id="2_bg"]
+[ext_resource type="Texture2D" path="res://menu/assets/logo_lobel_ai.png" id="3_logo"]
+[ext_resource type="Texture2D" path="res://menu/assets/button_start_ai.png" id="4_start"]
+[ext_resource type="Texture2D" path="res://menu/assets/button_exit_ai.png" id="5_exit"]
+[ext_resource type="Texture2D" path="res://menu/assets/astronaut_menu_ai.png" id="6_astro"]
+
+[node name="MainMenu" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_script")
+
+[node name="Root" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Letterbox" type="ColorRect" parent="Root"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Stage" type="Control" parent="Root"]
+unique_name_in_owner = true
+clip_contents = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -320.0
+offset_top = -180.0
+offset_right = 320.0
+offset_bottom = 180.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="Background" type="TextureRect" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+texture = ExtResource("2_bg")
+
+[node name="Stars" type="Control" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+
+[node name="Logo" type="TextureRect" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_top = 3.0
+offset_right = 266.0
+offset_bottom = 128.0
+mouse_filter = 2
+texture = ExtResource("3_logo")
+
+[node name="Astronaut" type="TextureRect" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 250.0
+offset_top = 226.0
+offset_right = 314.0
+offset_bottom = 331.0
+mouse_filter = 2
+texture = ExtResource("6_astro")
+
+[node name="StartButton" type="TextureButton" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 34.0
+offset_top = 149.0
+offset_right = 238.0
+offset_bottom = 210.0
+focus_mode = 0
+texture_normal = ExtResource("4_start")
+
+[node name="ExitButton" type="TextureButton" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 36.0
+offset_top = 210.0
+offset_right = 236.0
+offset_bottom = 264.0
+focus_mode = 0
+texture_normal = ExtResource("5_exit")
+
+[node name="Fade" type="ColorRect" parent="Root/Stage"]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+mouse_filter = 2
+color = Color(0, 0, 0, 1)

@@ -1,5 +1,7 @@
 extends CanvasLayer
-## Cinemática de introducción de Claudio (5 escenas).
+## Cinemática de Claudio. La misma escena sirve para la introducción
+## (data/story.json, 5 escenas) y para el final de victoria
+## (data/ending.json, 4 escenas; ver cutscene/ending.tscn).
 ##
 ## Es una pieza autónoma: no cambia de escena ni toca GameState.
 ## Cuando termina (Jugar o Saltar) emite `finished(skipped)` y quien la
@@ -9,6 +11,21 @@ extends CanvasLayer
 ##     var intro := preload("res://cutscene/cutscene.tscn").instantiate()
 ##     add_child(intro)
 ##     intro.finished.connect(_on_intro_finished)
+##
+## Final de victoria (lo arma quien tenga la escena principal):
+##     GameState.victory.connect(_on_victory)
+##
+##     func _on_victory() -> void:
+##         get_tree().paused = true   # la cinemática sigue (PROCESS_MODE_ALWAYS)
+##         var ending := preload("res://cutscene/ending.tscn").instantiate()
+##         add_child(ending)
+##         ending.finished.connect(_on_ending_finished)
+##
+##     ## "SALIR" (o Saltar) regresa al menú principal con una partida nueva.
+##     func _on_ending_finished(_skipped: bool) -> void:
+##         get_tree().paused = false
+##         GameState.new_game()
+##         get_tree().change_scene_to_file("res://<escena que muestra el menú>.tscn")
 ##
 ## Controles: Enter/Espacio/→ siguiente · ← anterior · Esc saltar.
 ## Si el texto se está escribiendo, el primer "siguiente" lo completa.
@@ -237,6 +254,8 @@ func _show_scene(index: int) -> void:
 		_play_glow(effects.glow)
 	if effects.get("pulse_play", false):
 		_play_pulse(_next_button)
+	if effects.has("banner"):
+		_play_banner(effects.banner)
 
 
 func _clear_scene() -> void:
@@ -283,7 +302,7 @@ func _setup_button(data: Dictionary) -> void:
 	match id:
 		"skip": button = _skip_button
 		"back": button = _back_button
-		"next", "play": button = _next_button
+		"next", "play", "exit": button = _next_button
 		_: return
 	var tex: Dictionary = _story.buttons[id]
 	var state: String = data.get("state", "normal")
@@ -474,6 +493,42 @@ func _play_glow(data: Dictionary) -> void:
 	var tw := _tw().set_loops()
 	tw.tween_property(glow, "modulate:a", 0.6, 1.1).set_trans(Tween.TRANS_SINE)
 	tw.tween_property(glow, "modulate:a", 0.25, 1.1).set_trans(Tween.TRANS_SINE)
+
+
+## Letrero grande (ej. "¡CONTINUARÁ...!"): aparece con un salto y luego late.
+## data: text, x, y (centro), size (múltiplo de 8 para la fuente pixel), color, outline, delay.
+func _play_banner(data: Dictionary) -> void:
+	var label := Label.new()
+	label.text = data.get("text", "")
+	label.add_theme_font_override("font", FONT)
+	label.add_theme_font_size_override("font_size", int(data.get("size", 32)))
+	label.add_theme_color_override("font_color", Color(data.get("color", "#ffcc33")))
+	label.add_theme_color_override("font_outline_color", Color(data.get("outline", "#3a1c00")))
+	label.add_theme_constant_override("outline_size", 8)
+	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.6))
+	label.add_theme_constant_override("shadow_offset_x", 0)
+	label.add_theme_constant_override("shadow_offset_y", 3)
+	label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_effects.add_child(label)
+	label.reset_size()
+	label.pivot_offset = label.size / 2.0
+	label.position = Vector2(data.get("x", 320), data.get("y", 150)) - label.size / 2.0
+	label.scale = Vector2(0.3, 0.3)
+	label.modulate.a = 0.0
+
+	var tw := _tw()
+	tw.tween_interval(data.get("delay", 0.5))
+	tw.tween_property(label, "modulate:a", 1.0, 0.15)
+	tw.parallel().tween_property(label, "scale", Vector2(1.15, 1.15), 0.25) \
+		.set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(label, "scale", Vector2.ONE, 0.15)
+	tw.tween_callback(_beat_banner.bind(label))
+
+
+func _beat_banner(label: Label) -> void:
+	var beat := _tw().set_loops()
+	beat.tween_property(label, "scale", Vector2(1.05, 1.05), 0.5).set_trans(Tween.TRANS_SINE)
+	beat.tween_property(label, "scale", Vector2.ONE, 0.5).set_trans(Tween.TRANS_SINE)
 
 
 func _play_pulse(button: TextureButton) -> void:

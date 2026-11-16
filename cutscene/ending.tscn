@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="PackedScene" path="res://cutscene/cutscene.tscn" id="1_cutscene"]
+
+[node name="Ending" instance=ExtResource("1_cutscene")]
+story_path = "res://cutscene/data/ending.json"

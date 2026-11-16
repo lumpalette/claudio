@@ -1,0 +1,140 @@
+{
+  "resolution": { "width": 640, "height": 360 },
+  "advance": "manual",
+  "transition_ms": 280,
+  "type_speed": 40,
+  "scenes": [
+    {
+      "id": "06_survived",
+      "number": "06",
+      "title": "SOBREVIVISTE",
+      "speaker": "NARRADOR",
+      "lines": [
+        "¡Lo lograste! Tras sobrevivir los 7 días,",
+        "la señal de rescate ha sido escuchada."
+      ],
+      "background": "res://cutscene/assets/backgrounds/06_survived_ai.png",
+      "background_hd": "res://cutscene/assets/originals/06_survived_ai.png",
+      "character": null,
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "disabled" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.1, "focus": [320, 120], "duration": 4.0 },
+        "glow": { "x": 390, "y": 128, "radius": 50, "color": "#4de2f1" },
+        "title_delay": 0.6,
+        "text_delay": 0.9
+      }
+    },
+    {
+      "id": "07_rescue_ship",
+      "number": "07",
+      "title": "LA NAVE DE RESCATE",
+      "speaker": "NARRADOR",
+      "lines": [
+        "Una gran nave de rescate se aproxima para",
+        "llevar a Claudio de vuelta a casa."
+      ],
+      "background": "res://cutscene/assets/backgrounds/07_rescue_ship_ai.png",
+      "background_hd": "res://cutscene/assets/originals/07_rescue_ship_ai.png",
+      "character": null,
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.1, "focus": [200, 136], "duration": 3.5 },
+        "glow": { "x": 76, "y": 118, "radius": 40, "color": "#ffb347" },
+        "title_delay": 0.2,
+        "text_delay": 0.6
+      }
+    },
+    {
+      "id": "08_alien_attack",
+      "number": "08",
+      "title": "EL ATAQUE ALIEN",
+      "speaker": "NARRADOR",
+      "lines": [
+        "¡Un ataque inesperado! Naves extraterrestres",
+        "destruyen el rescate en segundos."
+      ],
+      "background": "res://cutscene/assets/backgrounds/08_alien_attack_ai.png",
+      "background_hd": "res://cutscene/assets/originals/08_alien_attack_ai.png",
+      "character": null,
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "next", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.08, "focus": [448, 168], "duration": 2.5 },
+        "shake": { "strength": 5, "duration": 0.6, "delay": 0.3 },
+        "flash": { "color": "#ff8a20", "alpha": 0.5, "count": 2, "delay": 0.3 },
+        "sparks": { "x": 448, "y": 168, "interval": 0.8 },
+        "title_delay": 0.2,
+        "text_delay": 0.9
+      }
+    },
+    {
+      "id": "09_abduction",
+      "number": "09",
+      "title": "EL SECUESTRO",
+      "speaker": "NARRADOR",
+      "lines": [
+        "Sin tiempo para escapar, el ovni se lleva",
+        "a Claudio... ¿Qué pasará ahora?"
+      ],
+      "background": "res://cutscene/assets/backgrounds/09_abduction_ai.png",
+      "background_hd": "res://cutscene/assets/originals/09_abduction_ai.png",
+      "character": null,
+      "buttons": [
+        { "id": "skip", "x": 296, "y": 316, "state": "normal" },
+        { "id": "back", "x": 392, "y": 316, "state": "normal" },
+        { "id": "exit", "x": 498, "y": 316, "state": "hover" }
+      ],
+      "effects": {
+        "camera": { "zoom_from": 1.1, "focus": [320, 48], "duration": 4.0 },
+        "glow": { "x": 320, "y": 170, "radius": 90, "color": "#5dff9a" },
+        "banner": { "text": "¡CONTINUARÁ...!", "x": 327, "y": 152, "size": 32, "delay": 0.8 },
+        "pulse_play": true,
+        "title_delay": 0.2,
+        "text_delay": 1.4
+      }
+    }
+  ],
+  "buttons": {
+    "back": {
+      "normal": "res://cutscene/assets/ui/button_back_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_back_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_back_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_back_disabled_ai.png"
+    },
+    "next": {
+      "normal": "res://cutscene/assets/ui/button_next_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_next_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_next_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_next_disabled_ai.png"
+    },
+    "skip": {
+      "normal": "res://cutscene/assets/ui/button_skip_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_skip_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_skip_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_skip_disabled_ai.png"
+    },
+    "exit": {
+      "normal": "res://cutscene/assets/ui/button_exit_normal_ai.png",
+      "hover": "res://cutscene/assets/ui/button_exit_hover_ai.png",
+      "pressed": "res://cutscene/assets/ui/button_exit_pressed_ai.png",
+      "disabled": "res://cutscene/assets/ui/button_exit_disabled_ai.png"
+    }
+  },
+  "events": {
+    "next": "next scene; on the last scene emits finished(false)",
+    "back": "previous scene; disabled on the first one",
+    "skip": "emits finished(true)",
+    "exit": "last scene: emits finished(false); whoever owns the ending returns to the main menu"
+  }
+}

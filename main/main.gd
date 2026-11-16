@@ -1,5 +1,5 @@
 extends Node
-## Escena principal: título -> cinemática -> juego -> fin -> reintentar.
+## Escena principal: menú LOBEL -> cinemática -> juego -> final -> menú.
 ## También cambia de sala cuando el jugador usa una puerta (ver core/door.gd).
 
 const ROOMS := {
@@ -9,14 +9,15 @@ const ROOMS := {
 }
 ## Dónde aparece el jugador según la sala de la que viene.
 const SPAWNS := {
-	&"rest_room": {&"operations": Vector2(44, 172)},
+	&"rest_room": {&"operations": Vector2(60, 172)},
 	&"operations": {&"rest_room": Vector2(60, 172), &"greenhouse": Vector2(588, 172)},
 	&"greenhouse": {&"operations": Vector2(336, 316)},
 }
 const START_ROOM := &"rest_room"
-const INTRO_SCENE := preload("res://cutscene/cutscene.tscn")
+const MENU_SCENE := preload("res://menu/main_menu.tscn")
+const ENDING_SCENE := preload("res://cutscene/ending.tscn")
 
-## La cinemática solo se ve la primera vez que se presiona "Jugar".
+## La cinemática de introducción solo se ve la primera vez que se presiona Iniciar.
 @export var play_intro := true
 
 @onready var _world: Node2D = $World
@@ -25,27 +26,31 @@ const INTRO_SCENE := preload("res://cutscene/cutscene.tscn")
 var _room: Node
 var _room_id: StringName
 var _intro_seen := false
+var _menu: CanvasLayer
 
 
 func _ready() -> void:
 	add_to_group(&"game")
-	_hud.play_requested.connect(_on_play_requested)
 	_hud.retry_requested.connect(start_game)
-	_hud.title_requested.connect(go_to_title)
+	_hud.title_requested.connect(go_to_menu)
+	GameState.victory.connect(_on_victory)
+	go_to_menu()
 
 
-func _on_play_requested() -> void:
+func go_to_menu() -> void:
+	get_tree().paused = false
+	_clear_room()
+	GameState.new_game()   # deja el reloj pausado hasta la próxima partida
 	_hud.hide_all()
-	if not play_intro or _intro_seen:
-		start_game()
-		return
-	var intro := INTRO_SCENE.instantiate()
-	intro.finished.connect(_on_intro_finished)
-	add_child(intro)
+	_menu = MENU_SCENE.instantiate()
+	_menu.play_cutscene = play_intro and not _intro_seen
+	_menu.start_game.connect(_on_menu_start)
+	add_child(_menu)
 
 
-func _on_intro_finished(_skipped: bool) -> void:
+func _on_menu_start(_intro_skipped: bool) -> void:
 	_intro_seen = true
+	_menu = null   # el menú se elimina solo (free_on_finish)
 	start_game()
 
 
@@ -59,11 +64,16 @@ func start_game() -> void:
 	_hud.show_toast("Día 1: mantén a Claudio con vida")
 
 
-func go_to_title() -> void:
-	get_tree().paused = false
-	_clear_room()
-	GameState.new_game()   # deja el reloj pausado hasta la próxima partida
-	_hud.show_title()
+func _on_victory() -> void:
+	get_tree().paused = true   # la cinemática sigue (PROCESS_MODE_ALWAYS)
+	_hud.hide_all()
+	var ending := ENDING_SCENE.instantiate()
+	ending.finished.connect(_on_ending_finished)
+	add_child(ending)
+
+
+func _on_ending_finished(_skipped: bool) -> void:
+	go_to_menu()
 
 
 func change_room(room_id: StringName) -> void:
