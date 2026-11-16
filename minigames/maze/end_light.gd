@@ -11,9 +11,10 @@ func _on_body_entered(body: Node2D) -> void:
 
 	if body is CharacterBody2D:
 		_llegado = true
-		var parent := get_parent()
-		if parent.has_method("terminar_minijuego"):
-			parent.terminar_minijuego(1.0)
-		elif parent.has_signal("finished"):
-			parent.finished.emit(1.0)
-			parent.queue_free()
+		var game := Minigame.of(self)
+		if game == null:
+			push_error("end_light: no está dentro de un Minigame")
+		elif game.has_method("terminar_minijuego"):
+			game.terminar_minijuego(1.0)
+		else:
+			game.finish(1.0)

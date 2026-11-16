@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d2nbas1dr5yxj"]
 
-[ext_resource type="Script" uid="uid://bkw5yphk8lcv" path="res://Minijuegos/Laberinto/canvas_layer.gd" id="1_3kld6"]
+[ext_resource type="Script" uid="uid://bkw5yphk8lcv" path="res://minigames/maze/canvas_layer.gd" id="1_3kld6"]
 
 [node name="CanvasLayer" type="CanvasLayer" unique_id=1814006383]
 script = ExtResource("1_3kld6")

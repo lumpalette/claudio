@@ -23,7 +23,7 @@ signal finished(skipped: bool)
 @export var use_hd_backgrounds := true
 @export_file("*.json") var story_path := "res://cutscene/data/story.json"
 
-const FONT := preload("res://cutscene/fonts/press_start_2p_regular.ttf")
+const FONT := preload("res://shared/fonts/press_start_2p_regular.ttf")
 const COLOR_TEXT := Color(0.88, 0.95, 1.0)
 const COLOR_ACCENT := Color(0.30, 0.88, 0.95)
 const COLOR_DOT_OFF := Color(0.30, 0.88, 0.95, 0.25)

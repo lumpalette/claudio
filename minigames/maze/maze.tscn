@@ -59,7 +59,6 @@ b = Vector2(476, 112)
 script = ExtResource("1_sfegl")
 
 [node name="TileMapLayer" type="TileMapLayer" parent="." unique_id=377197046]
-script = ExtResource("1_sfegl")
 
 [node name="Starfield071024x1024" type="Sprite2D" parent="TileMapLayer" unique_id=1500856220]
 position = Vector2(321.37503, 182.00002)

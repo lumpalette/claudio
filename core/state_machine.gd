@@ -27,11 +27,12 @@ func _physics_process(delta: float) -> void:
 # Fragile asf but I don't care I'm so done with this stupid event.
 func set_state(state_name: String) -> void:
 	state_name = state_name.to_lower()
-	
+	if not _states.has(state_name):
+		push_error("StateMachine: no existe el estado '%s' (hay: %s)" % [state_name, _states.keys()])
+		return
+
 	if _current_state:
 		_current_state.exit()
-	
+
 	_current_state = _states[state_name]
-	
-	if _current_state:
-		_current_state.enter()
+	_current_state.enter()

@@ -30,9 +30,10 @@ func _process(delta: float) -> void:
 	timer_label.text = "%.2f" % time_left
 
 func _acabarse_el_tiempo() -> void:
-	var parent := get_parent()
-	if parent.has_method("terminar_minijuego"):
-		parent.terminar_minijuego(0.5)
-	elif parent.has_signal("finished"):
-		parent.finished.emit(0.5)
-		parent.queue_free()
+	var game := Minigame.of(self)
+	if game == null:
+		push_error("Temporizador del laberinto: no está dentro de un Minigame")
+	elif game.has_method("terminar_minijuego"):
+		game.terminar_minijuego(0.5)
+	else:
+		game.finish(0.5)

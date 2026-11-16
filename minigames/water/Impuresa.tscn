@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dxju7b7xq70qk"]
 
-[ext_resource type="Texture2D" uid="uid://ciqpngb1l3aax" path="res://Minijuegos/Water/Icon31_17.png" id="1_eq7m6"]
-[ext_resource type="Script" uid="uid://diapoijo4jquw" path="res://Minijuegos/Water/impuresa.gd" id="1_h7rjb"]
+[ext_resource type="Texture2D" uid="uid://ciqpngb1l3aax" path="res://minigames/water/Icon31_17.png" id="1_eq7m6"]
+[ext_resource type="Script" uid="uid://diapoijo4jquw" path="res://minigames/water/impuresa.gd" id="1_h7rjb"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q0ovb"]
 radius = 17.117243

@@ -10,7 +10,7 @@ extends CanvasLayer
 @export var message := "Claudio tuvo que irse a dormir"
 @export var hold_seconds := 2.2
 
-const FONT := preload("res://cutscene/fonts/press_start_2p_regular.ttf")
+const FONT := preload("res://shared/fonts/press_start_2p_regular.ttf")
 
 @onready var _root: Control = %Root
 @onready var _black: ColorRect = %Black
