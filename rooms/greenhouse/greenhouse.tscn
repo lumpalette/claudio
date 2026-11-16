@@ -17,6 +17,7 @@
 [ext_resource type="Texture2D" uid="uid://c86xfsmbf0gv3" path="res://shared/textures/10.png" id="15_0wras"]
 [ext_resource type="Texture2D" uid="uid://jmiedu8cjyb6" path="res://shared/textures/2.png" id="16_nsc5j"]
 [ext_resource type="Script" uid="uid://o8lrfv56mjbi" path="res://rooms/greenhouse/microwave.gd" id="17_rc36t"]
+[ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="18_player"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5flt2"]
 texture = ExtResource("1_meudb")
@@ -64254,6 +64255,9 @@ region_rect = Rect2(336, 544, 48, 40)
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Table" unique_id=1320233684]
 position = Vector2(604, 252.5)
 shape = SubResource("RectangleShape2D_3kt2m")
+
+[node name="Player" parent="World" instance=ExtResource("18_player")]
+position = Vector2(334, 231)
 
 [node name="Microwave" type="Sprite2D" parent="World" unique_id=1511511836]
 z_index = 100
