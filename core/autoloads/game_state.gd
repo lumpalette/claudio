@@ -159,6 +159,13 @@ func apply_decay(hours: float, sleeping: bool) -> void:
 		if is_game_over:
 			return
 
+	# La tormenta también desgasta los sistemas de la estación.
+	if radiation_active:
+		change_stat(Balance.STATION_OXYGEN, -Balance.STORM_OXYGEN_DRAIN * hours)
+		if is_game_over:
+			return
+		change_stat(Balance.STATION_ENERGY, -Balance.STORM_ENERGY_DRAIN * hours)
+
 
 ## Castigo del desmayo. La saciedad respeta la red de seguridad (no mata).
 func apply_faint_penalty() -> void:
@@ -517,10 +524,16 @@ func sleep() -> bool:
 # --- Radiación -------------------------------------------------------------
 
 ## La llama TimeManager.trigger_radiation().
+## Primera llamarada: empieza la tormenta, que ya no termina.
 func apply_radiation(penalty: float) -> void:
-	change_stat(Balance.WELLBEING, -penalty)
-	set_stat_max(Balance.WELLBEING, Balance.RADIATION_WELLBEING_MAX)
 	radiation_active = true
+	set_stat_max(Balance.WELLBEING, Balance.RADIATION_WELLBEING_MAX)
+	change_stat(Balance.WELLBEING, -penalty)
+
+
+## Réplicas: pegan al bienestar mientras la tormenta sigue.
+func apply_flare(penalty: float) -> void:
+	change_stat(Balance.WELLBEING, -penalty)
 
 
 # --- Fin del juego ---------------------------------------------------------

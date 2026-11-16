@@ -11,6 +11,8 @@ extends Node
 signal time_changed(day: int, hour: float)
 signal day_changed(day: int)
 signal radiation_started(event: Dictionary)
+## Cada llamarada después de la primera, mientras dura la tormenta.
+signal flare_struck(event: Dictionary, penalty: float)
 signal sleep_started()
 signal sleep_ended()
 signal fainted()
@@ -20,7 +22,10 @@ var total_hours: float = Balance.START_HOUR
 var is_sleeping := false
 ## true mientras dura el sueño del desmayo (GameState aplica la red de seguridad).
 var is_fainted := false
+## true desde que empieza la tormenta; ya no vuelve a false (dura hasta el final).
 var radiation_triggered := false
+## Hora en la que cae la próxima llamarada de la tormenta.
+var _next_flare_hour := INF
 
 ## El reloj corre si nadie lo pausó y el juego no terminó.
 ## Para pausar usa pause_clock(motivo) / resume_clock(motivo): así un menú que se
@@ -53,6 +58,7 @@ func reset() -> void:
 	is_sleeping = false
 	is_fainted = false
 	radiation_triggered = false
+	_next_flare_hour = INF
 	_pause_reasons.clear()
 	_advancing = false
 	_queued_hours = 0.0
@@ -159,9 +165,12 @@ func _apply_time(hours: float) -> void:
 	if day != old_day:
 		day_changed.emit(day)
 
-	# d. Radiación
+	# d. Tormenta de radiación: la primera llamarada la empieza, y mientras
+	#    dura caen réplicas cada Balance.RADIATION_FLARE_HOURS.
 	if not radiation_triggered and total_hours >= Balance.RADIATION_HOUR:
 		trigger_radiation()
+	elif radiation_triggered and total_hours >= _next_flare_hour:
+		_strike_flare()
 
 	# e. Victoria (f. advance_hours se detiene solo porque is_game_over pasa a true)
 	if total_hours >= Balance.VICTORY_HOUR:
@@ -255,11 +264,43 @@ func trigger_radiation() -> void:
 	event["class_text"] = Balance.RADIATION_ALERT_TEXT[flare_class]
 
 	GameState.apply_radiation(Balance.RADIATION_PENALTY[flare_class])
+	_next_flare_hour = total_hours + Balance.RADIATION_FLARE_HOURS
 
 	if is_sleeping:
 		GameState.pending_alert = event
 	else:
 		_announce_radiation(event)
+
+
+## true mientras la tormenta solar sigue encima de la estación.
+func is_storm_active() -> bool:
+	return radiation_triggered and not GameState.is_game_over
+
+
+## Días que lleva la tormenta, contando el primero (1, 2, 3...).
+func get_storm_day() -> int:
+	if not radiation_triggered:
+		return 0
+	return get_day() - Balance.RADIATION_DAY + 1
+
+
+## Una réplica: pega al bienestar y avisa, sin detener el juego.
+func _strike_flare() -> void:
+	_next_flare_hour = total_hours + Balance.RADIATION_FLARE_HOURS
+	if GameState.is_game_over:
+		return
+
+	var event := _pick_flare()
+	var flare_class := String(event.get("classType", "M")).left(1).to_upper()
+	if not Balance.RADIATION_PENALTY.has(flare_class):
+		flare_class = "M"
+	event["class"] = flare_class
+	event["alert_text"] = _build_alert_text(event)
+	event["class_text"] = Balance.RADIATION_ALERT_TEXT[flare_class]
+
+	var penalty: float = Balance.RADIATION_PENALTY[flare_class] * Balance.RADIATION_AFTERSHOCK_MULT
+	GameState.apply_flare(penalty)
+	flare_struck.emit(event, penalty)
 
 
 ## ui/alert debe llamar resume_clock(&"alert") al cerrar la alerta.

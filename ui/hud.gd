@@ -84,6 +84,8 @@ var _end_retry: Button
 var _clock: CanvasLayer
 var _clock_box: Control
 var _stats_panel: PanelContainer
+var _storm_panel: PanelContainer
+var _storm_label: Label
 var _blink_time := 0.0
 var _game_active := false
 
@@ -106,6 +108,7 @@ func _ready() -> void:
 	GameState.message.connect(show_toast)
 	GameState.game_over.connect(_on_game_over)
 	TimeManager.radiation_started.connect(_on_radiation)
+	TimeManager.flare_struck.connect(_on_flare_struck)
 	refresh_stats()
 	hide_all()
 
@@ -118,6 +121,7 @@ func _process(delta: float) -> void:
 		var low: bool = GameState.get_stat(stat) < Balance.WARNING_THRESHOLD
 		(row["box"] as Control).modulate = COLOR_DANGER if low and blink_on else Color.WHITE
 	_update_clock_fade(delta)
+	_update_storm(blink_on)
 	_update_prompt()
 
 
@@ -278,7 +282,7 @@ func _on_stat_changed(stat: StringName, value: float) -> void:
 
 func _on_radiation(event: Dictionary) -> void:
 	_close_menu_silently()
-	_alert_body.text = "%s\n\n%s\n\nBienestar -%d y su máximo baja a %d\nel resto de la misión." % [
+	_alert_body.text = "%s\n\n%s\n\nLa tormenta durará el resto de la misión:\nBienestar -%d y su máximo baja a %d.\nLa estación perderá oxígeno y energía,\ny caerán más llamaradas." % [
 		event.get("class_text", ""),
 		event.get("alert_text", ""),
 		int(Balance.RADIATION_PENALTY.get(event.get("class", "M"), 30.0)),
@@ -288,6 +292,11 @@ func _on_radiation(event: Dictionary) -> void:
 	get_tree().paused = true
 	await get_tree().process_frame
 	_focus_first(_alert)
+
+
+## Réplica de la tormenta: solo un aviso, el juego no se detiene.
+func _on_flare_struck(event: Dictionary, penalty: float) -> void:
+	show_toast("%s: bienestar -%d" % [event.get("class_text", "Llamarada"), int(roundf(penalty))])
 
 
 func _on_game_over(reason: String) -> void:
@@ -398,6 +407,17 @@ func _update_clock_fade(delta: float) -> void:
 	_clock_box.modulate.a = move_toward(_clock_box.modulate.a, target, CLOCK_FADE_SPEED * delta)
 
 
+## Mientras dura la tormenta, un aviso fijo arriba a la derecha que parpadea.
+func _update_storm(blink_on: bool) -> void:
+	var active := _game_active and TimeManager.is_storm_active()
+	_storm_panel.visible = active
+	if not active:
+		return
+	_storm_label.text = "TORMENTA SOLAR - DIA %d DE %d" % [
+		TimeManager.get_storm_day(), Balance.TOTAL_DAYS - Balance.RADIATION_DAY + 1]
+	_storm_panel.modulate = Color.WHITE if blink_on else Color(1.0, 0.75, 0.75)
+
+
 func _set_clock_visible(value: bool) -> void:
 	if _clock:
 		_clock.visible = value
@@ -489,6 +509,16 @@ func _build_game_ui() -> void:
 	_room_label = _label("", COLOR_ACCENT)
 	room_panel.add_child(_room_label)
 	_game_ui.add_child(room_panel)
+
+	# Aviso de tormenta (arriba a la derecha)
+	_storm_panel = _panel(Color(0.22, 0.04, 0.06, 0.92), COLOR_DANGER)
+	_storm_panel.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	_storm_panel.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_storm_panel.position += Vector2(-4, 4)
+	_storm_label = _label("", COLOR_DANGER)
+	_storm_panel.add_child(_storm_label)
+	_storm_panel.hide()
+	_game_ui.add_child(_storm_panel)
 
 	# Avisos (debajo del nombre de la sala)
 	_toasts = VBoxContainer.new()

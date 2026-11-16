@@ -49,6 +49,8 @@ const SECONDS_PER_GAME_HOUR := DAY_LENGTH_SECONDS / 24.0
 const START_HOUR := 6.0
 const TOTAL_DAYS := 7
 const VICTORY_HOUR := TOTAL_DAYS * 24.0  # 168
+## La tormenta solar empieza el día RADIATION_DAY a las 06:00 y dura hasta
+## el final de la misión (ver la sección "Tormenta de radiación").
 const RADIATION_DAY := 5
 const RADIATION_HOUR := (RADIATION_DAY - 1) * 24.0 + 6.0  # 102
 const TIME_STEP := 0.25
@@ -191,7 +193,12 @@ const DRINK_HYDRATION := 40.0
 const START_INVENTORY := {"chicken_soup": 2, "mac_and_cheese": 2, "scrambled_eggs": 2}
 
 
-# --- Radiación (DONKI) ---
+# --- Tormenta de radiación (DONKI) ---
+## La tormenta empieza el día RADIATION_DAY y ya no se va: son los últimos
+## días de la misión y los más difíciles. Mientras dura:
+##   - el bienestar baja más rápido y su máximo queda en RADIATION_WELLBEING_MAX
+##   - la estación pierde oxígeno y energía por hora (los sistemas sufren)
+##   - cada RADIATION_FLARE_HOURS cae otra llamarada, más débil que la primera
 const DONKI_FILE_PATH := "res://data/donki_flares.json"
 const RADIATION_PENALTY := {"C": 20.0, "M": 30.0, "X": 40.0}
 const RADIATION_ALERT_TEXT := {
@@ -201,6 +208,14 @@ const RADIATION_ALERT_TEXT := {
 }
 const RADIATION_WELLBEING_MULT := 1.5
 const RADIATION_WELLBEING_MAX := 70.0
+
+## Desgaste extra por hora de la estación mientras dura la tormenta.
+const STORM_OXYGEN_DRAIN := 1.0
+const STORM_ENERGY_DRAIN := 1.5
+## Horas entre una llamarada y la siguiente.
+const RADIATION_FLARE_HOURS := 12.0
+## Las llamaradas que siguen a la primera son réplicas: pegan menos.
+const RADIATION_AFTERSHOCK_MULT := 0.4
 
 ## Evento de respaldo si el JSON falla o está vacío (clase M).
 ## TODO: reemplazar estos campos por un registro real de donki_flares.json.
