@@ -71,11 +71,11 @@ const ACTION_HOURS := {
 
 ## Statistic decay when [awake, sleeping]. Negative means the stat goes up.
 const DECAY := {
-	SATIETY: [1.0, 0.5],
-	HYDRATION: [3.0, 1.5],
-	REST: [3.0, -10.0],
-	WELLBEING: [1.5, 0.0],
-	STATION_OXYGEN: [2.0, 2.0],
+	SATIETY: [1.5, 0.6],
+	HYDRATION: [3.5, 1.5],
+	REST: [3.5, -10.0],
+	WELLBEING: [2.0, 0.3],
+	STATION_OXYGEN: [2.3, 2.2],
 }
 
 
