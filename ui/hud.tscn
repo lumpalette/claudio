@@ -1,38 +1,15 @@
 [gd_scene format=3 uid="uid://pb8gnockcs2j"]
 
-[ext_resource type="PackedScene" uid="uid://b1ifpc02qrutx" path="res://ui/clock/hud_clock.tscn" id="1_rbyyf"]
+[ext_resource type="Script" path="res://ui/hud.gd" id="1_hud"]
+[ext_resource type="PackedScene" uid="uid://b1ifpc02qrutx" path="res://ui/clock/hud_clock.tscn" id="2_clock"]
+[ext_resource type="PackedScene" path="res://ui/clock/faint_screen.tscn" id="3_faint"]
 
-[node name="HUD" type="CanvasLayer" unique_id=729379257]
-layer = 10
+[node name="HUD" type="CanvasLayer"]
+layer = 5
+script = ExtResource("1_hud")
 
-[node name="Root" type="Control" parent="." unique_id=955421255]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
+[node name="HudClock" parent="." instance=ExtResource("2_clock")]
+start_clock_on_ready = false
+day_format = "DIA %d"
 
-[node name="BottomBar" type="MarginContainer" parent="Root" unique_id=1567537507]
-layout_mode = 1
-anchors_preset = 12
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 0
-
-[node name="Panel" type="PanelContainer" parent="Root/BottomBar" unique_id=2111201354]
-layout_mode = 2
-
-[node name="HBox" type="HBoxContainer" parent="Root/BottomBar/Panel" unique_id=1248744689]
-layout_mode = 2
-
-[node name="Stats" type="HBoxContainer" parent="Root/BottomBar/Panel/HBox" unique_id=191473059]
-layout_mode = 2
-
-[node name="Control" type="Control" parent="Root/BottomBar/Panel/HBox" unique_id=1634056390]
-layout_mode = 2
-
-[node name="HudClock" parent="Root/BottomBar/Panel/HBox" unique_id=190624790 instance=ExtResource("1_rbyyf")]
+[node name="FaintScreen" parent="." instance=ExtResource("3_faint")]

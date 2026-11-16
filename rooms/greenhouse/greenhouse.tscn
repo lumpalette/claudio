@@ -18,6 +18,9 @@
 [ext_resource type="Texture2D" uid="uid://jmiedu8cjyb6" path="res://shared/textures/2.png" id="16_nsc5j"]
 [ext_resource type="Script" uid="uid://o8lrfv56mjbi" path="res://rooms/greenhouse/microwave.gd" id="17_rc36t"]
 [ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="18_player"]
+[ext_resource type="Script" path="res://core/door.gd" id="x_door"]
+[ext_resource type="Script" path="res://rooms/greenhouse/water_tube.gd" id="x_tube"]
+[ext_resource type="Script" path="res://rooms/greenhouse/garden.gd" id="x_garden"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_5flt2"]
 texture = ExtResource("1_meudb")
@@ -64198,6 +64201,15 @@ size = Vector2(21, 378)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_30dh8"]
 size = Vector2(661, 20)
 
+[sub_resource type="RectangleShape2D" id="x_door_shape"]
+size = Vector2(90, 24)
+
+[sub_resource type="RectangleShape2D" id="x_tube_shape"]
+size = Vector2(34, 70)
+
+[sub_resource type="RectangleShape2D" id="x_garden_shape"]
+size = Vector2(150, 30)
+
 [node name="Invernadere" type="Node2D" unique_id=1718636730]
 y_sort_enabled = true
 
@@ -64268,6 +64280,7 @@ region_rect = Rect2(576, 192, 48, 48)
 
 [node name="Area2D" type="Area2D" parent="World/Microwave" unique_id=1013789041]
 script = ExtResource("17_rc36t")
+prompt = "Cocinar"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="World/Microwave/Area2D" unique_id=1080683388]
 position = Vector2(-2, 24.080002)
@@ -64294,3 +64307,30 @@ shape = SubResource("RectangleShape2D_48ipn")
 [node name="CollisionShape2D7" type="CollisionShape2D" parent="StaticBody2D" unique_id=2002210780]
 position = Vector2(324.5, 361)
 shape = SubResource("RectangleShape2D_30dh8")
+
+[node name="DoorToOperations" type="Area2D" parent="."]
+position = Vector2(336, 340)
+script = ExtResource("x_door")
+prompt = "Ir a Operaciones"
+target_room = &"operations"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorToOperations"]
+shape = SubResource("x_door_shape")
+
+[node name="WaterDispenser" type="Area2D" parent="."]
+position = Vector2(256, 255)
+script = ExtResource("x_tube")
+prompt = "Beber agua"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="WaterDispenser"]
+shape = SubResource("x_tube_shape")
+
+[node name="Garden" type="Area2D" parent="."]
+position = Vector2(456, 272)
+script = ExtResource("x_garden")
+prompt = "Huerto"
+status_position = Vector2(10, 154)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Garden"]
+shape = SubResource("x_garden_shape")
+

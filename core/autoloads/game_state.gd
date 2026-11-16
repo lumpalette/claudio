@@ -205,7 +205,7 @@ func apply_action_cost(action_id: String) -> void:
 # --- Sala de operaciones y minijuegos --------------------------------------
 
 ## Llamar al abrir un minijuego:
-## "electrolysis", "oxygen", "maze", "ping_pong" o "exercise".
+## "electrolysis", "oxygen", "filter_water", "maze", "ping_pong" o "exercise".
 ## Cobra el costo al empezar (salir a la mitad no regala recursos) y pausa el reloj.
 ## Devuelve false (y emite message) si no alcanza.
 func start_minigame(action_id: String) -> bool:
@@ -234,6 +234,11 @@ func start_minigame(action_id: String) -> bool:
 				message.emit("Estás muy cansado para hacer ejercicio")
 				return false
 			change_stat(Balance.REST, -Balance.EXERCISE_REST_COST)
+		"filter_water":
+			var costs := {Balance.STATION_ENERGY: Balance.FILTER_ENERGY_COST}
+			if not _require(costs):
+				return false
+			spend(costs)
 		"maze", "ping_pong":
 			pass
 		_:
@@ -254,6 +259,8 @@ func finish_minigame(action_id: String, result: float) -> void:
 			change_stat(Balance.STATION_OXYGEN, Balance.OXYGEN_REWARD * result)
 		"maze":
 			change_stat(Balance.STATION_ENERGY, Balance.MAZE_ENERGY * result)
+		"filter_water":
+			change_stat(Balance.STATION_WATER, Balance.FILTER_WATER * result)
 		"ping_pong":
 			change_stat(Balance.WELLBEING, lerpf(Balance.PING_PONG_MIN, Balance.PING_PONG_MAX, result))
 		"exercise":

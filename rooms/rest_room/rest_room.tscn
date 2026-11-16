@@ -17,6 +17,8 @@
 [ext_resource type="Texture2D" uid="uid://cutc1mkwcv2nr" path="res://rooms/rest_room/pingpong/ping_pong_paddle_player.png" id="15_s520v"]
 [ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="16_0sqw6"]
 [ext_resource type="Texture2D" uid="uid://ckvsx6rpmjirv" path="res://rooms/rest_room/pingpong/ping_pong_paddle_rival.png" id="16_2fhqf"]
+[ext_resource type="Script" path="res://core/door.gd" id="x_door"]
+[ext_resource type="Script" path="res://rooms/rest_room/bed/bed_station.gd" id="x_bed"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q13qe"]
 texture = ExtResource("2_p22se")
@@ -399,6 +401,12 @@ size = Vector2(113, 36)
 [sub_resource type="CircleShape2D" id="CircleShape2D_426oi"]
 radius = 67.0
 
+[sub_resource type="RectangleShape2D" id="x_door_shape"]
+size = Vector2(48, 28)
+
+[sub_resource type="RectangleShape2D" id="x_bed_shape"]
+size = Vector2(50, 70)
+
 [node name="RestRoom" type="Node2D" unique_id=2091641607]
 y_sort_enabled = true
 
@@ -567,6 +575,7 @@ shape = SubResource("RectangleShape2D_pv2mu")
 [node name="Area2D" type="Area2D" parent="PingPongTable" unique_id=565799290]
 position = Vector2(1, -39)
 script = ExtResource("14_qvni2")
+prompt = "Jugar ping pong"
 action_id = "ping_pong"
 minigame_scene = ExtResource("14_rb3m3")
 
@@ -587,6 +596,7 @@ shape = SubResource("RectangleShape2D_426oi")
 
 [node name="Area2D" type="Area2D" parent="ExerciseBench" unique_id=1218091483]
 script = ExtResource("14_qvni2")
+prompt = "Hacer ejercicio"
 action_id = "exercise"
 minigame_scene = ExtResource("15_0sqw6")
 
@@ -595,3 +605,21 @@ shape = SubResource("CircleShape2D_426oi")
 
 [node name="Player" parent="." unique_id=1796187236 instance=ExtResource("16_0sqw6")]
 position = Vector2(267, 241)
+
+[node name="DoorToOperations" type="Area2D" parent="."]
+position = Vector2(28, 150)
+script = ExtResource("x_door")
+prompt = "Ir a Operaciones"
+target_room = &"operations"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="DoorToOperations"]
+shape = SubResource("x_door_shape")
+
+[node name="BedStation" type="Area2D" parent="."]
+position = Vector2(578, 200)
+script = ExtResource("x_bed")
+prompt = "Dormir"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="BedStation"]
+shape = SubResource("x_bed_shape")
+

@@ -156,9 +156,9 @@ const CROP_STAGES := 3  # Etapas del sprite del cultivo
 
 # --- Cocina ---
 const FOODS := {
-	"chicken_soup": {"name": "Chicken Soup", "satiety": 25.0, "heatable": true},
-	"mac_and_cheese": {"name": "Mac and Cheese", "satiety": 20.0, "heatable": true},
-	"scrambled_eggs": {"name": "Scrambled Eggs", "satiety": 15.0, "heatable": true},
+	"chicken_soup": {"name": "Sopa de pollo", "satiety": 25.0, "heatable": true},
+	"mac_and_cheese": {"name": "Macarrones", "satiety": 20.0, "heatable": true},
+	"scrambled_eggs": {"name": "Huevos revueltos", "satiety": 15.0, "heatable": true},
 	"lettuce": {"name": "Lechuga", "satiety": 15.0, "heatable": false},
 	"tomato": {"name": "Tomate enano", "satiety": 30.0, "heatable": false},
 	"chili": {"name": "Chile", "satiety": 50.0, "heatable": false},
