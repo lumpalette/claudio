@@ -18,6 +18,12 @@ const COLOR_DANGER := Color(1.0, 0.32, 0.32)
 const COLOR_GOOD := Color(0.55, 1.0, 0.45)
 const COLOR_PANEL := Color(0.04, 0.08, 0.15, 0.92)
 
+## El reloj se transparenta cuando el jugador pasa por detrás.
+const CLOCK_FADED_ALPHA := 0.25
+const CLOCK_FADE_SPEED := 4.0
+## Margen alrededor del reloj que cuenta como "el jugador está detrás".
+const CLOCK_FADE_MARGIN := 6.0
+
 ## Estado -> [nombre, ícono, hoja de barra]
 const STAT_ROWS := [
 	[&"satiety", "Saciedad", "res://ui/stat_bars/comida_40x40.png", "res://ui/stat_bars/hoja_comida.png"],
@@ -40,6 +46,7 @@ const GAME_OVER_TEXT := {
 
 const CONTROLS_TEXT := """Flechas / WASD: moverse
 E o Enter: interactuar
+T: mostrar u ocultar las barras
 Esc: pausa / salir de un minijuego
 
 Mantén a Claudio comido, hidratado
@@ -75,6 +82,8 @@ var _end_title: Label
 var _end_body: Label
 var _end_retry: Button
 var _clock: CanvasLayer
+var _clock_box: Control
+var _stats_panel: PanelContainer
 var _blink_time := 0.0
 var _game_active := false
 
@@ -88,6 +97,8 @@ func _ready() -> void:
 	layer = 5
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_clock = get_node_or_null(^"HudClock")
+	if _clock:
+		_clock_box = _clock.get_node_or_null(^"Root/Clock")
 	_build_theme()
 	_build()
 
@@ -106,10 +117,15 @@ func _process(delta: float) -> void:
 		var row: Dictionary = _stat_bars[stat]
 		var low: bool = GameState.get_stat(stat) < Balance.WARNING_THRESHOLD
 		(row["box"] as Control).modulate = COLOR_DANGER if low and blink_on else Color.WHITE
+	_update_clock_fade(delta)
 	_update_prompt()
 
 
 func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed(&"tasks") and _game_active and not get_tree().paused:
+		toggle_stats()
+		get_viewport().set_input_as_handled()
+		return
 	if not event.is_action_pressed(&"ui_cancel"):
 		return
 	if _controls.visible:
@@ -145,6 +161,13 @@ func hide_all() -> void:
 	_hide_overlays()
 	_game_ui.hide()
 	_set_clock_visible(false)
+
+
+## Muestra u oculta las barras de estado (tecla T).
+func toggle_stats() -> void:
+	_stats_panel.visible = not _stats_panel.visible
+	if not _stats_panel.visible:
+		show_toast("Barras ocultas: T para mostrarlas")
 
 
 func set_room_name(room_name: String) -> void:
@@ -361,6 +384,20 @@ func _update_prompt() -> void:
 		_prompt_label.text = "[E] " + target.get_prompt()
 
 
+## El reloj se transparenta mientras el jugador queda detrás de él, para no
+## estorbar la vista. Se compara en coordenadas de pantalla, que es donde
+## vive el reloj (un CanvasLayer no se mueve con la cámara).
+func _update_clock_fade(delta: float) -> void:
+	if _clock_box == null:
+		return
+	var behind := false
+	if _game_active and is_instance_valid(player) and _clock_box.is_visible_in_tree():
+		var rect := _clock_box.get_global_rect().grow(CLOCK_FADE_MARGIN)
+		behind = rect.has_point(player.get_global_transform_with_canvas().origin)
+	var target := CLOCK_FADED_ALPHA if behind else 1.0
+	_clock_box.modulate.a = move_toward(_clock_box.modulate.a, target, CLOCK_FADE_SPEED * delta)
+
+
 func _set_clock_visible(value: bool) -> void:
 	if _clock:
 		_clock.visible = value
@@ -431,12 +468,12 @@ func _build_game_ui() -> void:
 	_root.add_child(_game_ui)
 
 	# Barras de estado (arriba a la izquierda)
-	var stats_panel := _panel(COLOR_PANEL, Color(0.20, 0.35, 0.50))
-	stats_panel.position = Vector2(4, 4)
-	_game_ui.add_child(stats_panel)
+	_stats_panel = _panel(COLOR_PANEL, Color(0.20, 0.35, 0.50))
+	_stats_panel.position = Vector2(4, 4)
+	_game_ui.add_child(_stats_panel)
 	var stats := VBoxContainer.new()
 	stats.add_theme_constant_override(&"separation", 2)
-	stats_panel.add_child(stats)
+	_stats_panel.add_child(stats)
 	for i in STAT_ROWS.size():
 		if i == 0:
 			stats.add_child(_label("CLAUDIO", COLOR_ACCENT))
@@ -467,7 +504,7 @@ func _build_game_ui() -> void:
 	_prompt_panel.set_anchors_preset(Control.PRESET_CENTER_BOTTOM)
 	_prompt_panel.grow_horizontal = Control.GROW_DIRECTION_BOTH
 	_prompt_panel.grow_vertical = Control.GROW_DIRECTION_BEGIN
-	_prompt_panel.position.y = -8
+	_prompt_panel.position.y = -96
 	_prompt_label = _label("", Color.WHITE)
 	_prompt_panel.add_child(_prompt_label)
 	_prompt_panel.hide()
