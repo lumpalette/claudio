@@ -1,10 +1,7 @@
 class_name Balance
 extends RefCounted
-## Todas las constantes del juego "Sobrevive 7 días".
-## Si un número afecta el balance, vive aquí y en ningún otro lado.
 
-
-# --- Nombres de estados (usar siempre estas constantes, nunca texto suelto) ---
+## Statistics names.
 const SATIETY := &"satiety"
 const HYDRATION := &"hydration"
 const REST := &"rest"
@@ -13,17 +10,17 @@ const STATION_OXYGEN := &"station_oxygen"
 const STATION_WATER := &"station_water"
 const STATION_ENERGY := &"station_energy"
 
-## Estados que se muestran en el HUD (en este orden).
+## HUD statistics.
 const HUD_STATS: Array[StringName] = [SATIETY, HYDRATION, STATION_OXYGEN, WELLBEING]
 
-## Estados que causan game over al llegar a 0, con su razón.
+## Vital statistics, from the player.
 const FATAL_STATS := {
 	SATIETY: "starvation",
 	HYDRATION: "dehydration",
 	STATION_OXYGEN: "suffocation",
 }
 
-## Valores al iniciar una partida.
+## Initial states for statistics.
 const START_STATS := {
 	SATIETY: 100.0,
 	HYDRATION: 100.0,
@@ -34,8 +31,7 @@ const START_STATS := {
 	STATION_ENERGY: 100.0,
 }
 
-## Máximo de cada estado al iniciar. El máximo actual lo guarda GameState,
-## porque el del bienestar baja a RADIATION_WELLBEING_MAX con la radiación.
+## Maximum quantity for all statistics.
 const STAT_MAX := {
 	SATIETY: 100.0,
 	HYDRATION: 100.0,
@@ -47,7 +43,7 @@ const STAT_MAX := {
 }
 
 
-# --- Tiempo ---
+## Time constants.
 const DAY_LENGTH_SECONDS := 360.0  # demo: 120.0
 const SECONDS_PER_GAME_HOUR := DAY_LENGTH_SECONDS / 24.0
 const START_HOUR := 6.0
@@ -57,23 +53,21 @@ const RADIATION_DAY := 5
 const RADIATION_HOUR := (RADIATION_DAY - 1) * 24.0 + 6.0  # 102
 const TIME_STEP := 0.25
 
-## Horas de juego que dura cada acción.
+## Duration of every action.
 const ACTION_HOURS := {
 	"eat": 0.5,
 	"drink": 0.5,
 	"sow": 0.5,
 	"harvest": 0.5,
 	"electrolysis": 1.0,
-	"puzzle": 1.0,
+	"oxygen": 1.0,
+	"maze": 1.0,
 	"filter_water": 1.0,
 	"ping_pong": 1.0,
-	"oxygen": 1.0,
 	"exercise": 1.0,
-	"sleep": 8.0,
-	"faint": 12.0,
 }
 
-## Desgaste por hora: [despierto, dormido]. Negativo = sube.
+## Statistic decay when [awake, sleeping]. Negative means the stat goes up.
 const DECAY := {
 	SATIETY: [1.0, 0.5],
 	HYDRATION: [3.0, 1.5],
@@ -83,18 +77,18 @@ const DECAY := {
 }
 
 
-# --- Saciedad y bienestar ---
-const SATIETY_SATISFIED_THRESHOLD := 70.0  # >= 70: "Satisfecho"
-const SATIETY_HUNGRY_THRESHOLD := 40.0     # >= 40: "Con hambre"; < 40: "Hambriento"
+## Satiety and satisfaction constants.
+const SATIETY_SATISFIED_THRESHOLD := 70.0  # >= 70 means satisfied.
+const SATIETY_HUNGRY_THRESHOLD := 40.0     # >= 40 means you have hunger; < 40 means fatal
 const SATIETY_STATE_SATISFIED := "Satisfecho"
 const SATIETY_STATE_HUNGRY := "Con hambre"
 const SATIETY_STATE_STARVING := "Hambriento"
 
-## Costo de saciedad por acción según el estado.
+## Satiety decay produced by performing actions.
 const ACTION_SATIETY_COST_SATISFIED := 5.0
 const ACTION_SATIETY_COST_HUNGRY := 7.0
 const ACTION_SATIETY_COST_STARVING := 10.0
-const SATIETY_COST_ACTIONS := ["electrolysis", "oxygen", "puzzle", "filter_water", "harvest"]
+const SATIETY_COST_ACTIONS := ["electrolysis", "oxygen", "maze", "filter_water", "harvest"]
 
 const LOW_WELLBEING_THRESHOLD := 40.0
 const LOW_WELLBEING_SATIETY_MULT := 1.5
@@ -104,31 +98,43 @@ const LOW_REST_WARNING := 20.0   # "Estás muy cansado, ve a dormir"
 const FULL_WARNING := 90.0       # "Ya estás lleno"
 
 
-# --- Sueño ---
-const SLEEP_MAX_REST := 70.0
+# Sleep constants.
+## Acostarse entre SLEEP_FROM_HOUR y SLEEP_UNTIL_HOUR es "dormir de noche":
+## duerme hasta SLEEP_UNTIL_HOUR, así que mientras más tarde, menos horas
+## (y menos descanso, que sube 10 por hora según DECAY).
 const SLEEP_FROM_HOUR := 20.0
-const SLEEP_UNTIL_HOUR := 6.0
-const FAINT_WELLBEING_PENALTY := 10.0
+const SLEEP_UNTIL_HOUR := 6.0   # hora a la que siempre se despierta
+## Hora límite para dormir: desde aquí el reloj del HUD parpadea.
+const BEDTIME_HOUR := 22.0
+## Acostarse de día (fuera de la noche) es una siesta de duración fija.
+const NAP_HOURS := 3.0
+
+## Desmayo (descanso en 0): duerme hasta SLEEP_UNTIL_HOUR, se pierde el resto del día.
+const FAINT_SATIETY_PENALTY := 10.0
+const FAINT_WELLBEING_PENALTY := 50.0
+## Mientras está desmayado, saciedad, hidratación y oxígeno no bajan de este valor.
+const FAINT_VITAL_FLOOR := 10.0
 
 
-# --- Operaciones ---
+# Operation constants.
 const ELECTROLYSIS_WATER_COST := 10.0
 const ELECTROLYSIS_ENERGY_COST := 5.0
 const ELECTROLYSIS_OXYGEN := 50.0
-const PUZZLE_ENERGY := 40.0
+const MAZE_ENERGY := 40.0
 const FILTER_ENERGY_COST := 5.0
 const FILTER_WATER := 35.0
 const PING_PONG_MIN := 15.0
 const PING_PONG_MAX := 25.0
 
-# Minijuego "oxygen": genera oxígeno (mismos valores que la electrólisis)
+## Minijuego "oxygen": genera oxígeno (mismos valores que la electrólisis).
 const OXYGEN_WATER_COST := 10.0
 const OXYGEN_ENERGY_COST := 5.0
 const OXYGEN_REWARD := 50.0
 
-# Minijuego "exercise": sube el bienestar (mismos valores que el ping pong)
+## Minijuego "exercise": sube el bienestar y cuesta descanso.
 const EXERCISE_MIN := 15.0
 const EXERCISE_MAX := 25.0
+const EXERCISE_REST_COST := 10.0
 
 ## Resultado de un minijuego: nunca 0, para que nadie se quede atorado.
 const MINIGAME_MIN_RESULT := 0.5

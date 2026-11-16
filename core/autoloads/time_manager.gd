@@ -18,6 +18,8 @@ signal fainted()
 
 var total_hours: float = Balance.START_HOUR
 var is_sleeping := false
+## true mientras dura el sueño del desmayo (GameState aplica la red de seguridad).
+var is_fainted := false
 var radiation_triggered := false
 
 ## El reloj corre si nadie lo pausó y el juego no terminó.
@@ -49,6 +51,7 @@ func _ready() -> void:
 func reset() -> void:
 	total_hours = Balance.START_HOUR
 	is_sleeping = false
+	is_fainted = false
 	radiation_triggered = false
 	_pause_reasons.clear()
 	_advancing = false
@@ -167,17 +170,49 @@ func _apply_time(hours: float) -> void:
 
 # --- Sueño y desmayo -------------------------------------------------------
 
-## La llama GameState.sleep() después de revisar can_sleep().
+## La llama GameState.sleep().
+## De noche (SLEEP_FROM_HOUR a SLEEP_UNTIL_HOUR) duerme hasta SLEEP_UNTIL_HOUR:
+## mientras más tarde se acueste, menos horas duerme y menos descanso recupera.
+## De día es una siesta de NAP_HOURS.
 func start_sleep() -> void:
 	if is_sleeping or GameState.is_game_over:
 		return
-	_sleep_for(Balance.ACTION_HOURS["sleep"])
+	if is_night():
+		_sleep_until_wake()
+	else:
+		_sleep_for(Balance.NAP_HOURS)
 
 
-func _sleep_for(hours: float) -> void:
+func is_night() -> bool:
+	var hour := get_hour()
+	return hour >= Balance.SLEEP_FROM_HOUR or hour < Balance.SLEEP_UNTIL_HOUR
+
+
+## true desde BEDTIME_HOUR hasta SLEEP_UNTIL_HOUR: ya debería estar dormido.
+func is_past_bedtime() -> bool:
+	var hour := get_hour()
+	return hour >= Balance.BEDTIME_HOUR or hour < Balance.SLEEP_UNTIL_HOUR
+
+
+## Horas que faltan para la próxima SLEEP_UNTIL_HOUR (06:00).
+## Si ya son exactamente las 06:00, devuelve 24 (la del día siguiente).
+func hours_until_wake() -> float:
+	var hours := fposmod(Balance.SLEEP_UNTIL_HOUR - get_hour(), 24.0)
+	return 24.0 if hours < 0.001 else hours
+
+
+func _sleep_until_wake() -> void:
+	_sleep_for(hours_until_wake(), true)
+
+
+func _sleep_for(hours: float, snap_to_minute := false) -> void:
 	is_sleeping = true
 	sleep_started.emit()
 	advance_hours(hours)
+	if snap_to_minute and not GameState.is_game_over:
+		# Evita que el redondeo de los pasos deje el reloj en 05:59.
+		total_hours = roundf(total_hours * 60.0) / 60.0
+		time_changed.emit(get_day(), get_hour())
 	is_sleeping = false
 	if GameState.is_game_over:
 		return
@@ -196,9 +231,12 @@ func _handle_pending_faint() -> void:
 	if not _faint_pending or _advancing or is_sleeping or GameState.is_game_over:
 		return
 	_faint_pending = false
-	fainted.emit()  # ui/alert muestra "Te desmayaste por cansancio"
-	GameState.change_stat(Balance.WELLBEING, -Balance.FAINT_WELLBEING_PENALTY)
-	_sleep_for(Balance.ACTION_HOURS["faint"])
+	is_fainted = true
+	fainted.emit()  # day/faint_screen muestra "Claudio tuvo que irse a dormir"
+	GameState.apply_faint_penalty()
+	# Se pierde el resto del día: duerme hasta las 06:00.
+	_sleep_until_wake()
+	is_fainted = false
 
 
 # --- Radiación -------------------------------------------------------------
@@ -233,7 +271,7 @@ func _announce_radiation(event: Dictionary) -> void:
 func _show_pending_alert() -> void:
 	if GameState.pending_alert.is_empty():
 		return
-	var event := GameState.pending_alert
+	var event: Dictionary = GameState.pending_alert
 	GameState.pending_alert = {}
 	_announce_radiation(event)
 

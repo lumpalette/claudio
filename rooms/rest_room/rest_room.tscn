@@ -14,6 +14,7 @@
 [ext_resource type="Script" uid="uid://b33mcxbavor3s" path="res://minigames/minigame_station.gd" id="14_qvni2"]
 [ext_resource type="PackedScene" uid="uid://chvfc1ghcn7nh" path="res://minigames/exercise/exercise.tscn" id="15_0sqw6"]
 [ext_resource type="Texture2D" uid="uid://cutc1mkwcv2nr" path="res://rooms/rest_room/pingpong/ping_pong_paddle_player.png" id="15_s520v"]
+[ext_resource type="PackedScene" uid="uid://c5n7b5ga3wbj1" path="res://core/player/player.tscn" id="16_0sqw6"]
 [ext_resource type="Texture2D" uid="uid://ckvsx6rpmjirv" path="res://rooms/rest_room/pingpong/ping_pong_paddle_rival.png" id="16_2fhqf"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_q13qe"]
@@ -578,3 +579,6 @@ minigame_scene = ExtResource("15_0sqw6")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ExerciseBench/Area2D" unique_id=1229260201]
 shape = SubResource("CircleShape2D_426oi")
+
+[node name="Player" parent="." unique_id=1796187236 instance=ExtResource("16_0sqw6")]
+position = Vector2(267, 241)

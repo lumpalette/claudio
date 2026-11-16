@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b1ifpc02qrutx"]
 
-[ext_resource type="Script" uid="uid://dfiy6j75twngu" path="res://day/hud_clock.gd" id="1_script"]
-[ext_resource type="Texture2D" uid="uid://n7uxxikyqsa8" path="res://day/assets/clock_frame_ai.png" id="2_frame"]
-[ext_resource type="Texture2D" uid="uid://leecvfd6cmog" path="res://day/assets/clock_hand_ai.png" id="3_hand"]
+[ext_resource type="Script" uid="uid://dfiy6j75twngu" path="res://ui/clock/hud_clock.gd" id="1_script"]
+[ext_resource type="Texture2D" uid="uid://n7uxxikyqsa8" path="res://ui/clock/assets/clock_frame_ai.png" id="2_frame"]
+[ext_resource type="Texture2D" uid="uid://leecvfd6cmog" path="res://ui/clock/assets/clock_hand_ai.png" id="3_hand"]
 
 [node name="HudClock" type="CanvasLayer" unique_id=190624790]
 layer = 3

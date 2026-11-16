@@ -147,9 +147,26 @@ func apply_decay(hours: float, sleeping: bool) -> void:
 			rate *= Balance.LOW_WELLBEING_SATIETY_MULT
 		elif stat == Balance.WELLBEING and radiation_active:
 			rate *= Balance.RADIATION_WELLBEING_MULT
-		change_stat(stat, -rate * hours)
+		if TimeManager.is_fainted and Balance.FATAL_STATS.has(stat):
+			_drop_with_floor(stat, rate * hours)
+		else:
+			change_stat(stat, -rate * hours)
 		if is_game_over:
 			return
+
+
+## Castigo del desmayo. La saciedad respeta la red de seguridad (no mata).
+func apply_faint_penalty() -> void:
+	_drop_with_floor(Balance.SATIETY, Balance.FAINT_SATIETY_PENALTY)
+	change_stat(Balance.WELLBEING, -Balance.FAINT_WELLBEING_PENALTY)
+
+
+## Baja `amount` sin pasar de FAINT_VITAL_FLOOR (si ya estaba debajo, no baja más).
+func _drop_with_floor(stat: StringName, amount: float) -> void:
+	var current := get_stat(stat)
+	var floor_value := minf(current, Balance.FAINT_VITAL_FLOOR)
+	var target := maxf(current - amount, floor_value)
+	change_stat(stat, target - current)
 
 
 func is_low_wellbeing() -> bool:
@@ -187,7 +204,8 @@ func apply_action_cost(action_id: String) -> void:
 
 # --- Sala de operaciones y minijuegos --------------------------------------
 
-## Llamar al abrir un minijuego ("electrolysis", "oxygen", "puzzle", "ping_pong" o "exercise").
+## Llamar al abrir un minijuego:
+## "electrolysis", "oxygen", "maze", "ping_pong" o "exercise".
 ## Cobra el costo al empezar (salir a la mitad no regala recursos) y pausa el reloj.
 ## Devuelve false (y emite message) si no alcanza.
 func start_minigame(action_id: String) -> bool:
@@ -210,7 +228,13 @@ func start_minigame(action_id: String) -> bool:
 			if not _require(costs):
 				return false
 			spend(costs)
-		"puzzle", "ping_pong", "exercise":
+		"exercise":
+			# Cansa al astronauta: cuesta descanso, no recursos de la estación.
+			if get_stat(Balance.REST) < Balance.EXERCISE_REST_COST:
+				message.emit("Estás muy cansado para hacer ejercicio")
+				return false
+			change_stat(Balance.REST, -Balance.EXERCISE_REST_COST)
+		"maze", "ping_pong":
 			pass
 		_:
 			push_error("GameState.start_minigame: minijuego desconocido '%s'" % action_id)
@@ -228,8 +252,8 @@ func finish_minigame(action_id: String, result: float) -> void:
 			change_stat(Balance.STATION_OXYGEN, Balance.ELECTROLYSIS_OXYGEN * result)
 		"oxygen":
 			change_stat(Balance.STATION_OXYGEN, Balance.OXYGEN_REWARD * result)
-		"puzzle":
-			change_stat(Balance.STATION_ENERGY, Balance.PUZZLE_ENERGY * result)
+		"maze":
+			change_stat(Balance.STATION_ENERGY, Balance.MAZE_ENERGY * result)
 		"ping_pong":
 			change_stat(Balance.WELLBEING, lerpf(Balance.PING_PONG_MIN, Balance.PING_PONG_MAX, result))
 		"exercise":
@@ -392,22 +416,18 @@ func drink() -> bool:
 
 # --- Dormitorio ------------------------------------------------------------
 
+## Siempre se puede dormir: de noche duerme hasta las 06:00 y de día es una
+## siesta de Balance.NAP_HOURS (ver TimeManager.start_sleep()).
 func can_sleep() -> bool:
-	var hour := TimeManager.get_hour()
-	return (
-		get_stat(Balance.REST) < Balance.SLEEP_MAX_REST
-		or hour >= Balance.SLEEP_FROM_HOUR
-		or hour < Balance.SLEEP_UNTIL_HOUR
-	)
+	return not is_game_over and not TimeManager.is_sleeping
 
 
-## Lo llama la cama. Devuelve false (y emite message) si no tiene sueño.
+## Lo llama la cama.
 func sleep() -> bool:
-	if is_game_over or TimeManager.is_sleeping:
-		return false
 	if not can_sleep():
-		message.emit("No tienes sueño. Puedes dormir después de las 20:00")
 		return false
+	if not TimeManager.is_night():
+		message.emit("Tomas una siesta de %d horas" % int(Balance.NAP_HOURS))
 	TimeManager.start_sleep()
 	return true
 

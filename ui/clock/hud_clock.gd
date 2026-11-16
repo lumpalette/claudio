@@ -19,7 +19,7 @@ extends CanvasLayer
 @export var hand_speed := 240.0
 @export var day_format := "DÍA %d"
 
-const FONT := preload("res://cutscene/fonts/press_start_2p_regular.ttf")
+const FONT := preload("res://shared/fonts/press_start_2p_regular.ttf")
 const COLOR_ACCENT := Color(0.30, 0.88, 0.95)
 const COLOR_TEXT := Color(0.88, 0.95, 1.0)
 const COLOR_LATE := Color(1.0, 0.56, 0.19)   # naranja: ya es hora de dormir

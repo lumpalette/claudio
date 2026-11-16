@@ -1,6 +1,6 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene format=3]
 
-[ext_resource type="Script" path="res://day/faint_screen.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://d10d5vt11tbrj" path="res://ui/clock/faint_screen.gd" id="1_script"]
 
 [node name="FaintScreen" type="CanvasLayer"]
 layer = 20

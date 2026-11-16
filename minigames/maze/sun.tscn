@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b5gorjgfwrkvx"]
 
 [ext_resource type="Script" uid="uid://6wla1tyolm7y" path="res://minigames/maze/sun.gd" id="1_up6tu"]
-[ext_resource type="Texture2D" path="res://Minijuegos/assets/rayo_sol.png" id="2_n85ou"]
+[ext_resource type="Texture2D" uid="uid://w4asnx2ygkek" path="res://minigames/assets/rayo_sol.png" id="2_n85ou"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_q0ovb"]
 radius = 16.27882

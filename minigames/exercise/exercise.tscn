@@ -5,6 +5,13 @@
 [ext_resource type="Texture2D" uid="uid://dwt5bej8uaofn" path="res://minigames/exercise/assets/suelo_640x32.png" id="3_n0x4v"]
 [ext_resource type="Texture2D" uid="uid://b8bll6n3rvuq0" path="res://minigames/exercise/assets/meta_bandera.png" id="4_8yj4x"]
 [ext_resource type="Texture2D" uid="uid://d3gyxxlvwua3r" path="res://minigames/exercise/assets/astronauta_hoja_4x1.png" id="5_782wr"]
+[ext_resource type="FontFile" uid="uid://b2ws8ni1meg6y" path="res://shared/fonts/press_start_2p_regular.ttf" id="6_1d4cw"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_bhh3w"]
+font = ExtResource("6_1d4cw")
+
+[sub_resource type="LabelSettings" id="LabelSettings_or7ab"]
+font = ExtResource("6_1d4cw")
 
 [node name="Exercise" type="Node2D" unique_id=630913095]
 script = ExtResource("1_aw2j5")
@@ -36,7 +43,9 @@ hframes = 4
 [node name="Marcador" type="Label" parent="." unique_id=1711624272]
 offset_right = 40.0
 offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_bhh3w")
 
 [node name="Mensaje" type="Label" parent="." unique_id=1871172658]
 offset_right = 40.0
 offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_or7ab")

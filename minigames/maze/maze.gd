@@ -1,6 +1,5 @@
-extends Node2D
+extends Minigame
 
-signal finished(result: float)
 
 var _terminado: bool = false
 

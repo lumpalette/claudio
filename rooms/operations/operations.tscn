@@ -9,6 +9,8 @@
 [ext_resource type="Texture2D" uid="uid://gggii1lnwsy7" path="res://shared/textures/8.png" id="7_ce6g7"]
 [ext_resource type="Texture2D" uid="uid://delyksyhe1dd3" path="res://shared/textures/tile-B-02.png" id="8_31it1"]
 [ext_resource type="Texture2D" uid="uid://dt7hukdliv1sq" path="res://shared/textures/tile-B-03.png" id="9_nph2u"]
+[ext_resource type="Script" uid="uid://b33mcxbavor3s" path="res://minigames/minigame_station.gd" id="10_l17ue"]
+[ext_resource type="PackedScene" uid="uid://c4okhvbc4o20m" path="res://minigames/maze/maze.tscn" id="11_v3p1d"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_0t166"]
 texture = ExtResource("1_vkyei")
@@ -20623,6 +20625,9 @@ size = Vector2(139.5, 41)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wm7ca"]
 size = Vector2(57.75, 76.5)
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_pv2mu"]
+radius = 53.66
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_yvuei"]
 size = Vector2(642.0625, 189)
 
@@ -20716,6 +20721,14 @@ region_rect = Rect2(160, 64, 64, 80)
 [node name="BaseCollision" type="CollisionShape2D" parent="World/Chair" unique_id=777373597]
 position = Vector2(315.875, 182)
 shape = SubResource("RectangleShape2D_wm7ca")
+
+[node name="Area2D" type="Area2D" parent="World/Chair" unique_id=415873351]
+position = Vector2(314, 191)
+script = ExtResource("10_l17ue")
+minigame_scene = ExtResource("11_v3p1d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="World/Chair/Area2D" unique_id=1004916230]
+shape = SubResource("CircleShape2D_pv2mu")
 
 [node name="Walls" type="StaticBody2D" parent="." unique_id=1215043494]
 
